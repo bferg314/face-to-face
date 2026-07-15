@@ -3,7 +3,7 @@
 A web-based collection of table games for 2–4 people sharing one screen —
 designed for a tablet or laptop lying flat on the table between players.
 
-**Games:** Checkers and Reversi (playable now) · Chess, Mancala, Nine Men's
+**Games:** Checkers, Reversi, and Mancala (playable now) · Chess, Nine Men's
 Morris, Ultimate Tic-Tac-Toe, Dots & Boxes, Yacht Dice, and Boggle (planned)
 
 ## Features
@@ -12,6 +12,8 @@ Morris, Ultimate Tic-Tac-Toe, Dots & Boxes, Yacht Dice, and Boggle (planned)
   forced-capture rule, undo, and win detection.
 - **Reversi** with full rules: flip animations, legal-move hints, automatic
   passes when a player has no move, undo, and score tracking.
+- **Mancala** (Kalah rules): extra turns, captures, end-of-game sweep, and a
+  sowing animation that ripples along the pits.
 - **Two seating layouts** for 2-player games:
   - *Across the table* — the far player's panel is rotated 180° to face them.
   - *Side by side* — both player panels face the same direction.
