@@ -1,10 +1,11 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { CheckersGame } from './games/checkers/CheckersGame';
 import { ReversiGame } from './games/reversi/ReversiGame';
+import { MancalaGame } from './games/mancala/MancalaGame';
 import { SettingsModal } from './components/SettingsModal';
 import { loadSettings, saveSettings, type Settings } from './settings';
 
-type GameId = 'checkers' | 'reversi';
+type GameId = 'checkers' | 'reversi' | 'mancala';
 type Screen = 'home' | GameId;
 
 export default function App() {
@@ -31,6 +32,13 @@ export default function App() {
       )}
       {screen === 'reversi' && (
         <ReversiGame
+          settings={settings}
+          onExit={() => setScreen('home')}
+          onOpenSettings={() => setSettingsOpen(true)}
+        />
+      )}
+      {screen === 'mancala' && (
+        <MancalaGame
           settings={settings}
           onExit={() => setScreen('home')}
           onOpenSettings={() => setSettingsOpen(true)}
@@ -75,6 +83,18 @@ const PLAYABLE: Array<{
       </>
     ),
   },
+  {
+    id: 'mancala',
+    title: 'Mancala',
+    meta: '2 players',
+    thumb: (
+      <>
+        <span className="mini big seed-thumb" />
+        <span className="mini big seed-thumb" />
+        <span className="mini big seed-thumb" />
+      </>
+    ),
+  },
 ];
 
 const COMING_SOON: Array<{
@@ -85,7 +105,6 @@ const COMING_SOON: Array<{
   glyphClass?: string;
 }> = [
   { id: 'chess', title: 'Chess', meta: '2 players', glyph: '♞' },
-  { id: 'mancala', title: 'Mancala', meta: '2 players', glyph: '🌰' },
   { id: 'morris', title: 'Nine Men’s Morris', meta: '2 players', glyph: '▣' },
   { id: 'ultimate-ttt', title: 'Ultimate Tic-Tac-Toe', meta: '2 players', glyph: '✕○' },
   { id: 'dots-boxes', title: 'Dots & Boxes', meta: '2–4 players', glyph: '∷' },
