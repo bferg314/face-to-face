@@ -1,15 +1,18 @@
 import { useState, type ReactNode } from 'react';
 import type { ViewMode } from '../settings';
+import { HelpModal, type GameHelp } from './HelpModal';
 
 /**
  * Shared frame for all games: control rail, seating layout (across /
- * side-by-side, including rotating the far player's panel), and the themed
- * confirmation modals for New game and Home while a game is in progress.
+ * side-by-side, including rotating the far player's panel), the "How to play"
+ * modal, and the themed confirmation modals for New game and Home while a
+ * game is in progress.
  */
 export function GameShell({
   viewMode,
   gameInProgress,
   undoDisabled,
+  help,
   onExit,
   onOpenSettings,
   onNewGame,
@@ -21,6 +24,7 @@ export function GameShell({
   viewMode: ViewMode;
   gameInProgress: boolean;
   undoDisabled: boolean;
+  help?: GameHelp;
   onExit: () => void;
   onOpenSettings: () => void;
   onNewGame: () => void;
@@ -30,6 +34,7 @@ export function GameShell({
   children: ReactNode;
 }) {
   const [confirming, setConfirming] = useState<'new' | 'home' | null>(null);
+  const [helpOpen, setHelpOpen] = useState(false);
   const layout = viewMode === 'across' ? 'across' : 'sbs';
 
   return (
@@ -68,6 +73,16 @@ export function GameShell({
         >
           ⟲
         </button>
+        {help && (
+          <button
+            className="icon-btn"
+            onClick={() => setHelpOpen(true)}
+            title="How to play"
+            aria-label="How to play"
+          >
+            ?
+          </button>
+        )}
       </div>
 
       <div className={`panel-pos pos-2${layout === 'across' ? ' rot' : ''}`}>
@@ -75,6 +90,8 @@ export function GameShell({
       </div>
       <div className="board-wrap">{children}</div>
       <div className="panel-pos pos-1">{panel1}</div>
+
+      {help && helpOpen && <HelpModal help={help} onClose={() => setHelpOpen(false)} />}
 
       {confirming && (
         <div className="modal-backdrop" onClick={() => setConfirming(null)}>

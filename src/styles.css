@@ -957,6 +957,35 @@ button {
   margin-top: 18px;
 }
 
+/* -------------------------------------------------------------- how to play */
+
+.help-modal {
+  width: min(480px, 92vw);
+}
+
+.help-objective {
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+.help-group {
+  margin-top: 16px;
+}
+
+.help-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.help-list li::marker {
+  color: var(--muted);
+}
+
 .group-title {
   display: block;
   font-size: 0.78rem;
