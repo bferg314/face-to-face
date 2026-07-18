@@ -6,17 +6,33 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.5.0",
+    "playwright": "^1.61.1",
     "typescript": "^5.8.0",
     "vite": "^6.3.0"
-  }
+  },
+  "description": "A web-based collection of table games for 2–4 people sharing one screen — designed for a tablet or laptop lying flat on the table between players.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bferg314/face-to-face.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bferg314/face-to-face/issues"
+  },
+  "homepage": "https://github.com/bferg314/face-to-face#readme"
 }

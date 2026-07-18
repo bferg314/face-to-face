@@ -10,6 +10,7 @@ import {
   type PlayerId,
 } from './engine';
 import { GameShell } from '../../components/GameShell';
+import { mancalaHelp } from './help';
 import type { Settings } from '../../settings';
 
 /** Deterministic scatter positions (golden-angle spiral) for seed dots. */
@@ -99,6 +100,7 @@ export function MancalaGame({
       viewMode={settings.viewMode}
       gameInProgress={gameInProgress}
       undoDisabled={past.length === 0}
+      help={mancalaHelp}
       onExit={onExit}
       onOpenSettings={onOpenSettings}
       onNewGame={newMatch}

@@ -13,6 +13,7 @@ import {
   type PlayerId,
 } from './engine';
 import { GameShell } from '../../components/GameShell';
+import { checkersHelp } from './help';
 import type { Settings } from '../../settings';
 
 export function CheckersGame({
@@ -100,6 +101,7 @@ export function CheckersGame({
       viewMode={settings.viewMode}
       gameInProgress={gameInProgress}
       undoDisabled={past.length === 0}
+      help={checkersHelp}
       onExit={onExit}
       onOpenSettings={onOpenSettings}
       onNewGame={newMatch}

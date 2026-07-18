@@ -10,6 +10,7 @@ import {
   type ReversiState,
 } from './engine';
 import { GameShell } from '../../components/GameShell';
+import { reversiHelp } from './help';
 import type { Settings } from '../../settings';
 
 export function ReversiGame({
@@ -71,6 +72,7 @@ export function ReversiGame({
       viewMode={settings.viewMode}
       gameInProgress={gameInProgress}
       undoDisabled={past.length === 0}
+      help={reversiHelp}
       onExit={onExit}
       onOpenSettings={onOpenSettings}
       onNewGame={newMatch}
