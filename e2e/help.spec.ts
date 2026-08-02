@@ -4,6 +4,10 @@ const GAMES = [
   { name: 'Checkers', sections: ['Moving', 'Capturing', 'Kings', 'Winning'] },
   { name: 'Reversi', sections: ['Placing discs', 'Flipping', 'Passing', 'Winning'] },
   { name: 'Mancala', sections: ['Sowing', 'Extra turns', 'Capturing', 'Winning'] },
+  {
+    name: 'Ultimate Tic-Tac-Toe',
+    sections: ['Placing marks', 'Where you must play', 'Free moves', 'Winning'],
+  },
 ];
 
 for (const { name, sections } of GAMES) {
