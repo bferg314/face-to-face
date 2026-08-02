@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import type { CSSProperties } from 'react';
+import { useMemo } from 'react';
 import {
   applyMove,
   counts,
@@ -10,6 +9,8 @@ import {
   type ReversiState,
 } from './engine';
 import { GameShell } from '../../components/GameShell';
+import { PlayerPanel } from '../../components/PlayerPanel';
+import { useGameHistory } from '../../hooks/useGameHistory';
 import { reversiHelp } from './help';
 import type { Settings } from '../../settings';
 
@@ -22,31 +23,18 @@ export function ReversiGame({
   onExit: () => void;
   onOpenSettings: () => void;
 }) {
-  const [state, setState] = useState<ReversiState>(newGame);
-  const [past, setPast] = useState<ReversiState[]>([]);
+  const history = useGameHistory<ReversiState>(newGame);
+  const { state } = history;
 
   const moves = useMemo(() => movesFor(state.board, state.turn), [state]);
   const moveByTarget = useMemo(() => new Map(moves.map((m) => [m.to, m])), [moves]);
   const score = useMemo(() => counts(state.board), [state.board]);
-  const gameInProgress = past.length > 0 && !state.winner;
 
   function clickCell(i: number) {
     if (state.winner) return;
     const move = moveByTarget.get(i);
     if (!move) return;
-    setPast((p) => [...p, state]);
-    setState(applyMove(state, move));
-  }
-
-  function undo() {
-    if (past.length === 0) return;
-    setState(past[past.length - 1]);
-    setPast((p) => p.slice(0, -1));
-  }
-
-  function newMatch() {
-    setState(newGame());
-    setPast([]);
+    history.play(applyMove(state, move));
   }
 
   const cells = state.board.map((cell, i) => {
@@ -70,13 +58,13 @@ export function ReversiGame({
   return (
     <GameShell
       viewMode={settings.viewMode}
-      gameInProgress={gameInProgress}
-      undoDisabled={past.length === 0}
+      gameInProgress={history.gameInProgress}
+      undoDisabled={history.undoDisabled}
       help={reversiHelp}
       onExit={onExit}
       onOpenSettings={onOpenSettings}
-      onNewGame={newMatch}
-      onUndo={undo}
+      onNewGame={history.newMatch}
+      onUndo={history.undo}
       panel1={<ReversiPanel player={1} state={state} score={score[1]} />}
       panel2={<ReversiPanel player={2} state={state} score={score[2]} />}
     >
@@ -95,7 +83,7 @@ export function ReversiGame({
                   {score[1]} – {score[2]}
                 </p>
                 <div className="win-actions">
-                  <button onClick={newMatch}>Rematch</button>
+                  <button onClick={history.newMatch}>Rematch</button>
                   <button className="secondary" onClick={onExit}>
                     Home
                   </button>
@@ -135,21 +123,13 @@ function ReversiPanel({
               ? 'No moves — pass'
               : 'Waiting…';
 
-  const swatchVars = {
-    '--pc': `var(--p${player})`,
-    '--pe': `var(--p${player}-edge)`,
-  } as CSSProperties;
-
   return (
-    <div
-      className={`panel panel-${player}${active ? ' active' : ''}${won ? ' won' : ''}`}
-    >
-      <span className="swatch" style={swatchVars} />
-      <div className="who">
-        <span className="pname">Player {player}</span>
-        <span className="pstatus">{status}</span>
-      </div>
-      <span className="score">{score}</span>
-    </div>
+    <PlayerPanel
+      player={player}
+      active={active}
+      won={won}
+      status={status}
+      score={score}
+    />
   );
 }

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { CSSProperties } from 'react';
 import {
   applyMove,
@@ -10,6 +10,8 @@ import {
   type PlayerId,
 } from './engine';
 import { GameShell } from '../../components/GameShell';
+import { PlayerPanel } from '../../components/PlayerPanel';
+import { useGameHistory } from '../../hooks/useGameHistory';
 import { mancalaHelp } from './help';
 import type { Settings } from '../../settings';
 
@@ -36,27 +38,14 @@ export function MancalaGame({
   onExit: () => void;
   onOpenSettings: () => void;
 }) {
-  const [state, setState] = useState<MancalaState>(newGame);
-  const [past, setPast] = useState<MancalaState[]>([]);
+  const history = useGameHistory<MancalaState>(newGame);
+  const { state, past } = history;
 
   const legal = useMemo(() => new Set(legalPits(state)), [state]);
-  const gameInProgress = past.length > 0 && !state.winner;
 
   function clickPit(i: number) {
     if (!legal.has(i)) return;
-    setPast((p) => [...p, state]);
-    setState(applyMove(state, i));
-  }
-
-  function undo() {
-    if (past.length === 0) return;
-    setState(past[past.length - 1]);
-    setPast((p) => p.slice(0, -1));
-  }
-
-  function newMatch() {
-    setState(newGame());
-    setPast([]);
+    history.play(applyMove(state, i));
   }
 
   const last = state.lastMove;
@@ -98,13 +87,13 @@ export function MancalaGame({
   return (
     <GameShell
       viewMode={settings.viewMode}
-      gameInProgress={gameInProgress}
-      undoDisabled={past.length === 0}
+      gameInProgress={history.gameInProgress}
+      undoDisabled={history.undoDisabled}
       help={mancalaHelp}
       onExit={onExit}
       onOpenSettings={onOpenSettings}
-      onNewGame={newMatch}
-      onUndo={undo}
+      onNewGame={history.newMatch}
+      onUndo={history.undo}
       panel1={<MancalaPanel player={1} state={state} />}
       panel2={<MancalaPanel player={2} state={state} />}
     >
@@ -130,7 +119,7 @@ export function MancalaGame({
                   {state.pits[STORE[1]]} – {state.pits[STORE[2]]}
                 </p>
                 <div className="win-actions">
-                  <button onClick={newMatch}>Rematch</button>
+                  <button onClick={history.newMatch}>Rematch</button>
                   <button className="secondary" onClick={onExit}>
                     Home
                   </button>
@@ -162,21 +151,13 @@ function MancalaPanel({ player, state }: { player: PlayerId; state: MancalaState
               : 'Your move'
             : 'Waiting…';
 
-  const swatchVars = {
-    '--pc': `var(--p${player})`,
-    '--pe': `var(--p${player}-edge)`,
-  } as CSSProperties;
-
   return (
-    <div
-      className={`panel panel-${player}${active ? ' active' : ''}${won ? ' won' : ''}`}
-    >
-      <span className="swatch" style={swatchVars} />
-      <div className="who">
-        <span className="pname">Player {player}</span>
-        <span className="pstatus">{status}</span>
-      </div>
-      <span className="score">{state.pits[STORE[player]]}</span>
-    </div>
+    <PlayerPanel
+      player={player}
+      active={active}
+      won={won}
+      status={status}
+      score={state.pits[STORE[player]]}
+    />
   );
 }

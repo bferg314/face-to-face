@@ -53,6 +53,9 @@ button {
   --rv-line: #2f5233;
   --mn-pit: #45331f;
   --seed: #e2c98f;
+  --ut-cell: #e9d3a5;
+  --ut-line: #c8ab7a;
+  --ut-grid: #3a2c1e;
 }
 
 [data-theme='tournament'] {
@@ -75,6 +78,9 @@ button {
   --rv-line: #204a37;
   --mn-pit: #1c3b2b;
   --seed: #efe0b5;
+  --ut-cell: #efe6c9;
+  --ut-line: #cdbf9b;
+  --ut-grid: #1a3026;
 }
 
 [data-theme='midnight'] {
@@ -97,6 +103,9 @@ button {
   --rv-line: #0d1226;
   --mn-pit: #101731;
   --seed: #9fd9f0;
+  --ut-cell: #1c2440;
+  --ut-line: #2b3760;
+  --ut-grid: #070a12;
 }
 
 [data-theme='porcelain'] {
@@ -119,6 +128,9 @@ button {
   --rv-line: #879880;
   --mn-pit: #c6bda6;
   --seed: #c07a3e;
+  --ut-cell: #faf6ea;
+  --ut-line: #d8d0bd;
+  --ut-grid: #9aa2ae;
 }
 
 /* Midnight pieces get a soft neon glow. */
@@ -743,6 +755,166 @@ button {
 .mini.seed-thumb {
   background: #d9b36c;
   box-shadow: inset 0 -2px 0 #a37f3d;
+}
+
+/* ------------------------------------------------ ultimate tic-tac-toe */
+
+/* Note: no `.across` rules anywhere in this section, by design. The marks
+   are a cross and a ring, both unchanged by a 180° rotation, and nothing
+   else on this board carries text — so the far player reads it as-is. */
+
+.ut-board {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: 1.6%;
+  padding: 1.6%;
+  background: var(--ut-grid);
+}
+
+.ut-sub {
+  position: relative;
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: 2.2%;
+  padding: 2.2%;
+  background: var(--ut-line);
+  transition: box-shadow 0.2s;
+}
+
+/* The playable-board ring is a rule display, not a hint: it renders whether
+   or not Show hints is on, because without it the game cannot be played. */
+.ut-sub.forced {
+  box-shadow:
+    inset 0 0 0 3px var(--accent),
+    0 0 12px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.ut-sub.free {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.ut-cell {
+  position: relative;
+  background: var(--ut-cell);
+}
+
+.ut-cell.open {
+  cursor: pointer;
+}
+
+/* The empty-square dot IS a hint, and is gated on the setting. */
+.ut-cell.hint::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 24%;
+  height: 24%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.ut-cell.last {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.ut-cell.inline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+  animation: sowflash 0.7s ease-out var(--d, 0ms) both;
+}
+
+.ut-mark {
+  position: absolute;
+  inset: 14%;
+  width: 72%;
+  height: 72%;
+  stroke: var(--pc);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  fill: none;
+  animation: pop 0.25s ease-out;
+}
+
+/* A decided board dims its marks so the big result reads first. */
+.ut-sub.won-1 .ut-cell,
+.ut-sub.won-2 .ut-cell,
+.ut-sub.drawn .ut-cell {
+  opacity: 0.4;
+}
+
+.ut-sub.won-1,
+.ut-sub.won-2 {
+  background: color-mix(in srgb, var(--pc) 22%, var(--ut-line));
+}
+
+.ut-sub.won-1 {
+  --pc: var(--p1);
+}
+
+.ut-sub.won-2 {
+  --pc: var(--p2);
+}
+
+.ut-sub.winline {
+  box-shadow:
+    inset 0 0 0 3px var(--accent),
+    0 0 16px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+/* The big result mark sits above the dimmed cells, spanning the sub-board. */
+.ut-mark.big {
+  position: absolute;
+  inset: 12%;
+  width: 76%;
+  height: 76%;
+  stroke-width: 2.6;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+/* Drawn board: a neutral diagonal hatch, drawn rather than a text glyph so it
+   needs no rotation handling and no font sizing. */
+.ut-drawn {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 6px,
+    color-mix(in srgb, var(--muted) 30%, transparent) 6px 12px
+  );
+}
+
+[data-pieces='classic'] .ut-mark {
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.35));
+}
+
+[data-pieces='flat'] .ut-mark {
+  stroke-linecap: butt;
+}
+
+[data-pieces='glass'] .ut-mark {
+  stroke-width: 2.6;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--pc) 60%, transparent));
+}
+
+[data-theme='midnight'] .ut-mark {
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--pc) 55%, transparent));
+}
+
+/* Lobby thumbnail: matches the .mini.big footprint. */
+.ut-mark.thumb-mark {
+  position: static;
+  inset: auto;
+  width: 34px;
+  height: 34px;
+  animation: none;
 }
 
 /* ----------------------------------------------------------- player panel */

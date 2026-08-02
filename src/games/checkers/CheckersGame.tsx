@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { CSSProperties } from 'react';
 import {
   applyMove,
   colOf,
@@ -13,6 +12,8 @@ import {
   type PlayerId,
 } from './engine';
 import { GameShell } from '../../components/GameShell';
+import { PlayerPanel } from '../../components/PlayerPanel';
+import { useGameHistory } from '../../hooks/useGameHistory';
 import { checkersHelp } from './help';
 import type { Settings } from '../../settings';
 
@@ -25,15 +26,15 @@ export function CheckersGame({
   onExit: () => void;
   onOpenSettings: () => void;
 }) {
-  const [state, setState] = useState<CheckersState>(() =>
+  const history = useGameHistory<CheckersState>(() =>
     newGame(settings.forcedCapture),
   );
-  const [past, setPast] = useState<CheckersState[]>([]);
+  const { state } = history;
   const [selected, setSelected] = useState<number | null>(null);
 
   // Rule changes from settings apply to the game in progress.
   useEffect(() => {
-    setState((s) =>
+    history.amend((s) =>
       s.forcedCapture === settings.forcedCapture
         ? s
         : { ...s, forcedCapture: settings.forcedCapture },
@@ -50,14 +51,11 @@ export function CheckersGame({
     if (state.chain !== null) setSelected(state.chain);
   }, [state.chain]);
 
-  const gameInProgress = past.length > 0 && !state.winner;
-
   function clickSquare(i: number) {
     if (state.winner) return;
     const move = destByTarget.get(i);
     if (move) {
-      setPast((p) => [...p, state]);
-      setState(applyMove(state, move));
+      history.play(applyMove(state, move));
       setSelected(null);
       return;
     }
@@ -65,16 +63,14 @@ export function CheckersGame({
     setSelected(movable.has(i) ? i : null);
   }
 
+  // Wrapped so the selection is cleared alongside the history change.
   function undo() {
-    if (past.length === 0) return;
-    setState(past[past.length - 1]);
-    setPast((p) => p.slice(0, -1));
+    history.undo();
     setSelected(null);
   }
 
   function newMatch() {
-    setState(newGame(settings.forcedCapture));
-    setPast([]);
+    history.newMatch();
     setSelected(null);
   }
 
@@ -99,15 +95,15 @@ export function CheckersGame({
   return (
     <GameShell
       viewMode={settings.viewMode}
-      gameInProgress={gameInProgress}
-      undoDisabled={past.length === 0}
+      gameInProgress={history.gameInProgress}
+      undoDisabled={history.undoDisabled}
       help={checkersHelp}
       onExit={onExit}
       onOpenSettings={onOpenSettings}
       onNewGame={newMatch}
       onUndo={undo}
-      panel1={<PlayerPanel player={1} state={state} />}
-      panel2={<PlayerPanel player={2} state={state} />}
+      panel1={<CheckersPanel player={1} state={state} />}
+      panel2={<CheckersPanel player={2} state={state} />}
     >
       <div className="board-frame">
         <div className="board-inner">
@@ -147,7 +143,7 @@ export function CheckersGame({
   );
 }
 
-function PlayerPanel({ player, state }: { player: PlayerId; state: CheckersState }) {
+function CheckersPanel({ player, state }: { player: PlayerId; state: CheckersState }) {
   const active = !state.winner && state.turn === player;
   const won = state.winner === player;
   const lost = state.winner === other(player);
@@ -162,20 +158,8 @@ function PlayerPanel({ player, state }: { player: PlayerId; state: CheckersState
           : 'Your move'
         : 'Waiting…';
 
-  const swatchVars = {
-    '--pc': `var(--p${player})`,
-    '--pe': `var(--p${player}-edge)`,
-  } as CSSProperties;
-
   return (
-    <div
-      className={`panel panel-${player}${active ? ' active' : ''}${won ? ' won' : ''}`}
-    >
-      <span className="swatch" style={swatchVars} />
-      <div className="who">
-        <span className="pname">Player {player}</span>
-        <span className="pstatus">{status}</span>
-      </div>
+    <PlayerPanel player={player} active={active} won={won} status={status}>
       <div className="tray">
         {taken.map((p) => (
           <span key={p.id} className={`mini p${p.player}`}>
@@ -183,7 +167,7 @@ function PlayerPanel({ player, state }: { player: PlayerId; state: CheckersState
           </span>
         ))}
       </div>
-    </div>
+    </PlayerPanel>
   );
 }
 
