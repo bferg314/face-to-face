@@ -1,11 +1,8 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { CheckersGame } from './games/checkers/CheckersGame';
-import { ReversiGame } from './games/reversi/ReversiGame';
-import { MancalaGame } from './games/mancala/MancalaGame';
+import { useEffect, useState } from 'react';
 import { SettingsModal } from './components/SettingsModal';
+import { COMING_SOON, GAMES, type GameId } from './games/registry';
 import { loadSettings, saveSettings, type Settings } from './settings';
 
-type GameId = 'checkers' | 'reversi' | 'mancala';
 type Screen = 'home' | GameId;
 
 export default function App() {
@@ -15,32 +12,19 @@ export default function App() {
 
   useEffect(() => saveSettings(settings), [settings]);
 
+  const active = GAMES.find((g) => g.id === screen);
+
   return (
     <div className="app" data-theme={settings.theme} data-pieces={settings.pieceStyle}>
-      {screen === 'home' && (
+      {active ? (
+        <active.Component
+          settings={settings}
+          onExit={() => setScreen('home')}
+          onOpenSettings={() => setSettingsOpen(true)}
+        />
+      ) : (
         <Home
           onPlay={(game) => setScreen(game)}
-          onOpenSettings={() => setSettingsOpen(true)}
-        />
-      )}
-      {screen === 'checkers' && (
-        <CheckersGame
-          settings={settings}
-          onExit={() => setScreen('home')}
-          onOpenSettings={() => setSettingsOpen(true)}
-        />
-      )}
-      {screen === 'reversi' && (
-        <ReversiGame
-          settings={settings}
-          onExit={() => setScreen('home')}
-          onOpenSettings={() => setSettingsOpen(true)}
-        />
-      )}
-      {screen === 'mancala' && (
-        <MancalaGame
-          settings={settings}
-          onExit={() => setScreen('home')}
           onOpenSettings={() => setSettingsOpen(true)}
         />
       )}
@@ -54,63 +38,6 @@ export default function App() {
     </div>
   );
 }
-
-const PLAYABLE: Array<{
-  id: GameId;
-  title: string;
-  meta: string;
-  thumb: ReactNode;
-}> = [
-  {
-    id: 'checkers',
-    title: 'Checkers',
-    meta: '2 players',
-    thumb: (
-      <>
-        <span className="mini big p1" />
-        <span className="mini big p2" />
-      </>
-    ),
-  },
-  {
-    id: 'reversi',
-    title: 'Reversi',
-    meta: '2 players',
-    thumb: (
-      <>
-        <span className="mini big disc-dark" />
-        <span className="mini big disc-light" />
-      </>
-    ),
-  },
-  {
-    id: 'mancala',
-    title: 'Mancala',
-    meta: '2 players',
-    thumb: (
-      <>
-        <span className="mini big seed-thumb" />
-        <span className="mini big seed-thumb" />
-        <span className="mini big seed-thumb" />
-      </>
-    ),
-  },
-];
-
-const COMING_SOON: Array<{
-  id: string;
-  title: string;
-  meta: string;
-  glyph: string;
-  glyphClass?: string;
-}> = [
-  { id: 'chess', title: 'Chess', meta: '2 players', glyph: '♞' },
-  { id: 'morris', title: 'Nine Men’s Morris', meta: '2 players', glyph: '▣' },
-  { id: 'ultimate-ttt', title: 'Ultimate Tic-Tac-Toe', meta: '2 players', glyph: '✕○' },
-  { id: 'dots-boxes', title: 'Dots & Boxes', meta: '2–4 players', glyph: '∷' },
-  { id: 'yacht', title: 'Yacht Dice', meta: '2–4 players', glyph: '⚄⚁' },
-  { id: 'boggle', title: 'Boggle', meta: '2–4 players', glyph: 'B', glyphClass: 'tile' },
-];
 
 function Home({
   onPlay,
@@ -132,7 +59,7 @@ function Home({
       <h1>Face to Face</h1>
       <p className="tagline">Table games for 2–4 players on one screen</p>
       <div className="game-cards">
-        {PLAYABLE.map((g) => (
+        {GAMES.map((g) => (
           <button
             key={g.id}
             className="game-card playable"
