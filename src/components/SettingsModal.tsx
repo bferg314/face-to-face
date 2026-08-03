@@ -1,5 +1,11 @@
 import type { CSSProperties } from 'react';
-import type { PieceStyle, Settings, ThemeId, ViewMode } from '../settings';
+import type {
+  DotsBoxesSize,
+  PieceStyle,
+  Settings,
+  ThemeId,
+  ViewMode,
+} from '../settings';
 
 const THEMES: Array<{ id: ThemeId; label: string }> = [
   { id: 'walnut', label: 'Walnut' },
@@ -17,6 +23,12 @@ const PIECE_STYLES: Array<{ id: PieceStyle; label: string }> = [
 const VIEWS: Array<{ id: ViewMode; label: string; hint: string }> = [
   { id: 'across', label: 'Across the table', hint: 'Screen lies flat between you' },
   { id: 'side-by-side', label: 'Side by side', hint: 'Both players on one side' },
+];
+
+const DB_SIZES: Array<{ id: DotsBoxesSize; label: string; hint: string }> = [
+  { id: 4, label: '4 × 4', hint: 'Quick' },
+  { id: 6, label: '6 × 6', hint: 'Standard' },
+  { id: 8, label: '8 × 8', hint: 'Long game' },
 ];
 
 const p1Vars = { '--pc': 'var(--p1)', '--pe': 'var(--p1-edge)' } as CSSProperties;
@@ -90,6 +102,24 @@ export function SettingsModal({
                   <span className="checker" style={p1Vars} />
                 </span>
                 {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="setting-group">
+          <span className="group-title">Dots &amp; Boxes board</span>
+          <div className="opt-row">
+            {DB_SIZES.map((s) => (
+              <button
+                key={s.id}
+                className={`opt ${settings.dotsBoxesSize === s.id ? 'selected' : ''}`}
+                onClick={() => set('dotsBoxesSize', s.id)}
+              >
+                <span>
+                  {s.label}
+                  <small>{s.hint}</small>
+                </span>
               </button>
             ))}
           </div>
