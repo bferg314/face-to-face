@@ -102,8 +102,10 @@ export function CheckersGame({
       onOpenSettings={onOpenSettings}
       onNewGame={newMatch}
       onUndo={undo}
-      panel1={<CheckersPanel player={1} state={state} />}
-      panel2={<CheckersPanel player={2} state={state} />}
+      panels={[
+        <CheckersPanel key={1} player={1} state={state} />,
+        <CheckersPanel key={2} player={2} state={state} />,
+      ]}
     >
       <div className="board-frame">
         <div className="board-inner">

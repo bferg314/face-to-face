@@ -327,12 +327,16 @@ button {
   gap: 4px;
 }
 
+/* Seat areas are named for where they sit, not for which player holds them:
+   pb/pt/pl/pr are the four chairs around a board lying flat, ps1/ps2 the
+   two-player side-by-side pair. GameShell picks the seat for each player. */
+
 .game.across {
   grid-template-rows: auto minmax(0, 1fr) auto;
   grid-template-areas:
-    'p2'
+    'pt'
     'board'
-    'p1';
+    'pb';
 }
 
 .game.sbs {
@@ -340,7 +344,25 @@ button {
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     'board board'
-    'p1 p2';
+    'ps1 ps2';
+}
+
+.game.seats-3 {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    '.  pt'
+    'pl board'
+    '.  pb';
+}
+
+.game.seats-4 {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    '.  pt    .'
+    'pl board pr'
+    '.  pb    .';
 }
 
 .panel-pos {
@@ -349,16 +371,60 @@ button {
   min-width: 0;
 }
 
-.panel-pos.rot {
+.pos-bottom {
+  grid-area: pb;
+}
+
+.pos-sbs-1 {
+  grid-area: ps1;
+}
+
+.pos-sbs-2 {
+  grid-area: ps2;
+}
+
+/* Each ring seat turns so the tops of its letters point away from that chair
+   — the same reason the far player's panel has always been upside down. */
+.pos-top {
+  grid-area: pt;
   transform: rotate(180deg);
 }
 
-.pos-1 {
-  grid-area: p1;
+.pos-left {
+  grid-area: pl;
 }
 
-.pos-2 {
-  grid-area: p2;
+.pos-right {
+  grid-area: pr;
+}
+
+/* A side seat is a narrow column holding a panel turned on its end. The
+   column is a size container, so the panel can be sized to the column's
+   *height* with 100cqh — a rotation is only ever visual, so without that the
+   grid would still reserve the panel's full unrotated width. */
+.pos-left,
+.pos-right {
+  position: relative;
+  container-type: size;
+  width: 58px;
+}
+
+/* `.panel-pos` is on the selector so this outweighs `.panel`'s own width,
+   which is declared later in this file. */
+.panel-pos.pos-left > *,
+.panel-pos.pos-right > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(640px, 100cqh);
+}
+
+.panel-pos.pos-left > * {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.panel-pos.pos-right > * {
+  transform: translate(-50%, -50%) rotate(-90deg);
 }
 
 .board-wrap {
@@ -1494,7 +1560,44 @@ button {
     grid-template-rows: minmax(0, 1fr) auto auto;
     grid-template-areas:
       'board'
-      'p1'
-      'p2';
+      'ps1'
+      'ps2';
+  }
+
+  /* A phone has no room for chairs to the left and right, so the ring
+     collapses into a stack and the side seats give up their rotation. */
+  .game.seats-3 {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      'pt'
+      'board'
+      'pb'
+      'pl';
+  }
+
+  .game.seats-4 {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+    grid-template-areas:
+      'pt'
+      'board'
+      'pb'
+      'pl'
+      'pr';
+  }
+
+  .pos-left,
+  .pos-right {
+    position: static;
+    container-type: normal;
+    width: auto;
+  }
+
+  .panel-pos.pos-left > *,
+  .panel-pos.pos-right > * {
+    position: static;
+    width: min(640px, 100%);
+    transform: none;
   }
 }

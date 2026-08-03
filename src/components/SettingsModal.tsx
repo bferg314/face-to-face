@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import type {
+  DotsBoxesPlayers,
   DotsBoxesSize,
   PieceStyle,
   Settings,
@@ -29,6 +30,12 @@ const DB_SIZES: Array<{ id: DotsBoxesSize; label: string; hint: string }> = [
   { id: 4, label: '4 × 4', hint: 'Quick' },
   { id: 6, label: '6 × 6', hint: 'Standard' },
   { id: 8, label: '8 × 8', hint: 'Long game' },
+];
+
+const DB_PLAYERS: Array<{ id: DotsBoxesPlayers; label: string }> = [
+  { id: 2, label: '2' },
+  { id: 3, label: '3' },
+  { id: 4, label: '4' },
 ];
 
 const p1Vars = { '--pc': 'var(--p1)', '--pe': 'var(--p1-edge)' } as CSSProperties;
@@ -101,6 +108,21 @@ export function SettingsModal({
                 <span className="piece-preview" data-pieces={p.id}>
                   <span className="checker" style={p1Vars} />
                 </span>
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="setting-group">
+          <span className="group-title">Dots &amp; Boxes players</span>
+          <div className="opt-row">
+            {DB_PLAYERS.map((p) => (
+              <button
+                key={p.id}
+                className={`opt ${settings.dotsBoxesPlayers === p.id ? 'selected' : ''}`}
+                onClick={() => set('dotsBoxesPlayers', p.id)}
+              >
                 {p.label}
               </button>
             ))}

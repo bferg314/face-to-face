@@ -53,8 +53,10 @@ export function UtttGame({
       onOpenSettings={onOpenSettings}
       onNewGame={history.newMatch}
       onUndo={history.undo}
-      panel1={<UtttPanel player={1} state={state} score={score[1]} />}
-      panel2={<UtttPanel player={2} state={state} score={score[2]} />}
+      panels={[
+        <UtttPanel key={1} player={1} state={state} score={score[1]} />,
+        <UtttPanel key={2} player={2} state={state} score={score[2]} />,
+      ]}
     >
       <div className="board-frame">
         <div className="board-inner">

@@ -3,10 +3,39 @@ import type { ViewMode } from '../settings';
 import { HelpModal, type GameHelp } from './HelpModal';
 
 /**
- * Shared frame for all games: control rail, seating layout (across /
- * side-by-side, including rotating the far player's panel), the "How to play"
- * modal, and the themed confirmation modals for New game and Home while a
- * game is in progress.
+ * Where a panel sits around the board. The four ring positions are seats at a
+ * table lying flat; `sbs-1`/`sbs-2` are the two-player side-by-side pair, both
+ * below the board and both upright. CSS rotates each ring seat so its text
+ * reads right way up from that chair.
+ */
+type SeatPos = 'bottom' | 'left' | 'top' | 'right' | 'sbs-1' | 'sbs-2';
+
+/**
+ * Seats for `count` players, in turn order. Three and four players always sit
+ * around the table — the seating setting is a two-player choice, since side by
+ * side has no sensible meaning once there are chairs on every edge.
+ *
+ * The ring runs bottom → left → top → right so consecutive players are
+ * physically adjacent and play passes around the table rather than across it.
+ */
+function seatPositions(count: number, viewMode: ViewMode): SeatPos[] {
+  if (count <= 2) {
+    return viewMode === 'across' ? ['bottom', 'top'] : ['sbs-1', 'sbs-2'];
+  }
+  return count === 3
+    ? ['bottom', 'left', 'top']
+    : ['bottom', 'left', 'top', 'right'];
+}
+
+function layoutClass(count: number, viewMode: ViewMode): string {
+  if (count <= 2) return viewMode === 'across' ? 'across' : 'sbs';
+  return `seats-${count}`;
+}
+
+/**
+ * Shared frame for all games: control rail, seating layout (rotating each
+ * player's panel to face their chair), the "How to play" modal, and the themed
+ * confirmation modals for New game and Home while a game is in progress.
  */
 export function GameShell({
   viewMode,
@@ -17,8 +46,7 @@ export function GameShell({
   onOpenSettings,
   onNewGame,
   onUndo,
-  panel1,
-  panel2,
+  panels,
   children,
 }: {
   viewMode: ViewMode;
@@ -29,13 +57,14 @@ export function GameShell({
   onOpenSettings: () => void;
   onNewGame: () => void;
   onUndo: () => void;
-  panel1: ReactNode;
-  panel2: ReactNode;
+  /** One panel per player, in turn order. Two to four of them. */
+  panels: ReactNode[];
   children: ReactNode;
 }) {
   const [confirming, setConfirming] = useState<'new' | 'home' | null>(null);
   const [helpOpen, setHelpOpen] = useState(false);
-  const layout = viewMode === 'across' ? 'across' : 'sbs';
+  const layout = layoutClass(panels.length, viewMode);
+  const seats = seatPositions(panels.length, viewMode);
 
   return (
     <div className={`game ${layout}`}>
@@ -85,11 +114,12 @@ export function GameShell({
         )}
       </div>
 
-      <div className={`panel-pos pos-2${layout === 'across' ? ' rot' : ''}`}>
-        {panel2}
-      </div>
+      {panels.map((panel, i) => (
+        <div key={i} className={`panel-pos pos-${seats[i]}`}>
+          {panel}
+        </div>
+      ))}
       <div className="board-wrap">{children}</div>
-      <div className="panel-pos pos-1">{panel1}</div>
 
       {help && helpOpen && <HelpModal help={help} onClose={() => setHelpOpen(false)} />}
 

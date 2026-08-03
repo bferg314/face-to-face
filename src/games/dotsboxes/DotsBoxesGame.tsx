@@ -28,11 +28,11 @@ export function DotsBoxesGame({
   onExit: () => void;
   onOpenSettings: () => void;
 }) {
-  // The live board renders from `state.size` throughout — a size change in
-  // settings reshapes nothing mid-game and applies from the next match, when
-  // `newMatch` calls this fresh closure.
+  // The live game renders from its own state throughout — changing the size
+  // or player count in settings reshapes nothing mid-game and applies from
+  // the next match, when `newMatch` calls this fresh closure.
   const history = useGameHistory<DotsBoxesState>(() =>
-    newGame(2, settings.dotsBoxesSize),
+    newGame(settings.dotsBoxesPlayers, settings.dotsBoxesSize),
   );
   const { state, past } = history;
   const { size } = state;
@@ -148,8 +148,9 @@ export function DotsBoxesGame({
       onOpenSettings={onOpenSettings}
       onNewGame={history.newMatch}
       onUndo={history.undo}
-      panel1={<DbPanel player={1} state={state} score={score[1]} />}
-      panel2={<DbPanel player={2} state={state} score={score[2]} />}
+      panels={players.map((p) => (
+        <DbPanel key={p} player={p} state={state} score={score[p]} />
+      ))}
     >
       <div className="board-frame">
         <div className="board-inner">

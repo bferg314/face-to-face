@@ -100,8 +100,7 @@ export const GAMES = [
   {
     id: 'dots-boxes',
     title: 'Dots & Boxes',
-    // The engine plays 2-4; the card says 2 until GameShell can seat more.
-    meta: '2 players',
+    meta: '2–4 players',
     thumb: (
       <>
         <span className="mini big db-thumb db-thumb-1" />

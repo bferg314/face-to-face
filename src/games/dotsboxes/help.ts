@@ -10,6 +10,7 @@ export const dotsBoxesHelp: GameHelp = {
       items: [
         'The board is a grid of dots. On your turn, tap the gap between two neighbouring dots to draw a line there.',
         'Any undrawn line, anywhere on the board, is a legal move.',
+        'Two to four can play; turns pass around the table. Set the count and the board size in Settings.',
       ],
     },
     {
@@ -23,7 +24,7 @@ export const dotsBoxesHelp: GameHelp = {
       heading: 'Extra turns',
       items: [
         'Completing a box means you move again immediately.',
-        'Boxes often fall in chains — one careless line can hand your opponent a whole run of them.',
+        'Boxes often fall in chains — one careless line can hand the next player a whole run of them.',
       ],
     },
     {
