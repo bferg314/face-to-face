@@ -7,10 +7,12 @@ import type { CSSProperties, ReactNode } from 'react';
  * state — the wording is genuinely game-specific — and passes it here.
  *
  * `PlayerId` is redeclared rather than imported from an engine: engines carry
- * no imports by convention, and `1 | 2` is structurally identical everywhere,
- * so every game can pass its own type with no cast.
+ * no imports by convention, and every engine's id type is a subset of
+ * `1 | 2 | 3 | 4`, so every game can pass its own type with no cast. Seats 3
+ * and 4 have colour tokens but no GameShell slot yet — engines may use them,
+ * screens can't seat them.
  */
-export type PlayerId = 1 | 2;
+export type PlayerId = 1 | 2 | 3 | 4;
 
 export function PlayerPanel({
   player,

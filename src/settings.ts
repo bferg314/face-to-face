@@ -1,6 +1,7 @@
 export type ThemeId = 'walnut' | 'tournament' | 'midnight' | 'porcelain';
 export type PieceStyle = 'classic' | 'flat' | 'glass';
 export type ViewMode = 'across' | 'side-by-side';
+export type DotsBoxesSize = 4 | 6 | 8;
 
 export interface Settings {
   theme: ThemeId;
@@ -8,6 +9,8 @@ export interface Settings {
   viewMode: ViewMode;
   forcedCapture: boolean;
   showHints: boolean;
+  /** Dots & Boxes board size, in boxes per side. Applies from the next game. */
+  dotsBoxesSize: DotsBoxesSize;
 }
 
 export const defaultSettings: Settings = {
@@ -16,6 +19,7 @@ export const defaultSettings: Settings = {
   viewMode: 'across',
   forcedCapture: true,
   showHints: true,
+  dotsBoxesSize: 6,
 };
 
 const STORAGE_KEY = 'face-to-face-settings';

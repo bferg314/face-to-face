@@ -48,6 +48,10 @@ button {
   --p1-edge: #7c221c;
   --p2: #35312c;
   --p2-edge: #16130f;
+  --p3: #3e6b4f;
+  --p3-edge: #24462f;
+  --p4: #44618c;
+  --p4-edge: #2a3f61;
   --crown: #f2c14e;
   --rv-sq: #47784a;
   --rv-line: #2f5233;
@@ -56,6 +60,9 @@ button {
   --ut-cell: #e9d3a5;
   --ut-line: #c8ab7a;
   --ut-grid: #3a2c1e;
+  --db-bg: #e9d3a5;
+  --db-dot: #4a3722;
+  --db-ghost: #c8ab7a;
 }
 
 [data-theme='tournament'] {
@@ -73,6 +80,10 @@ button {
   --p1-edge: #8a231d;
   --p2: #f3ead2;
   --p2-edge: #c2b088;
+  --p3: #3a5a8c;
+  --p3-edge: #23395e;
+  --p4: #e0a63c;
+  --p4-edge: #a06f14;
   --crown: #d99a1b;
   --rv-sq: #2f6b50;
   --rv-line: #204a37;
@@ -81,6 +92,9 @@ button {
   --ut-cell: #efe6c9;
   --ut-line: #cdbf9b;
   --ut-grid: #1a3026;
+  --db-bg: #efe6c9;
+  --db-dot: #2a4638;
+  --db-ghost: #cdbf9b;
 }
 
 [data-theme='midnight'] {
@@ -98,6 +112,10 @@ button {
   --p1-edge: #0f7f95;
   --p2: #e858c8;
   --p2-edge: #952a80;
+  --p3: #7ee87a;
+  --p3-edge: #3f9e46;
+  --p4: #ffb454;
+  --p4-edge: #c27a18;
   --crown: #ffffff;
   --rv-sq: #1e2747;
   --rv-line: #0d1226;
@@ -106,6 +124,9 @@ button {
   --ut-cell: #1c2440;
   --ut-line: #2b3760;
   --ut-grid: #070a12;
+  --db-bg: #1c2440;
+  --db-dot: #8b96b8;
+  --db-ghost: #2b3760;
 }
 
 [data-theme='porcelain'] {
@@ -123,6 +144,10 @@ button {
   --p1-edge: #94371f;
   --p2: #3d4c5c;
   --p2-edge: #212c38;
+  --p3: #5f7d43;
+  --p3-edge: #3e5429;
+  --p4: #7d5185;
+  --p4-edge: #533158;
   --crown: #f2c14e;
   --rv-sq: #a9b9a2;
   --rv-line: #879880;
@@ -131,6 +156,9 @@ button {
   --ut-cell: #faf6ea;
   --ut-line: #d8d0bd;
   --ut-grid: #9aa2ae;
+  --db-bg: #faf6ea;
+  --db-dot: #57606b;
+  --db-ghost: #d8d0bd;
 }
 
 /* Midnight pieces get a soft neon glow. */
@@ -915,6 +943,156 @@ button {
   width: 34px;
   height: 34px;
   animation: none;
+}
+
+/* ---------------------------------------------------------- dots & boxes */
+
+/* Note: no `.across` rules in this section, by design. Box ownership is a
+   plain colour fill and the dots and lines carry no text, so the far player
+   reads the board as-is (same reasoning as ultimate tic-tac-toe). */
+
+.db-board {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  /* The track list itself is inline in the component — `repeat()` can't take
+     a var count — but the shared knobs live here. */
+  --db-t: clamp(10px, 3.2cqw, 22px);
+  --db-hit: clamp(14px, 4cqw, 26px);
+  padding: calc(var(--db-t) * 0.5);
+  background: var(--db-bg);
+}
+
+.db-dot {
+  align-self: center;
+  justify-self: center;
+  width: calc(var(--db-t) * 0.55);
+  height: calc(var(--db-t) * 0.55);
+  border-radius: 50%;
+  background: var(--db-dot);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* The line is ::before; the ghost renders on every undrawn edge as a rule
+   display, not a hint — without it the tappable gaps are invisible. */
+.db-edge {
+  position: relative;
+  z-index: 1;
+}
+
+.db-edge::before {
+  content: '';
+  position: absolute;
+  border-radius: 99px;
+  background: var(--db-ghost);
+}
+
+.db-h::before {
+  inset: 32% 5%;
+}
+
+.db-v::before {
+  inset: 5% 32%;
+}
+
+.db-edge.open {
+  cursor: pointer;
+}
+
+/* Invisible tap target, expanded along the thin axis only so neighbouring
+   horizontal and vertical edges don't fight near the dots. */
+.db-h.open::after {
+  content: '';
+  position: absolute;
+  inset: calc(-0.55 * var(--db-hit)) 0;
+}
+
+.db-v.open::after {
+  content: '';
+  position: absolute;
+  inset: 0 calc(-0.55 * var(--db-hit));
+}
+
+/* An edge that would finish a box IS a hint, gated on the setting. */
+.db-edge.hint::before {
+  background: color-mix(in srgb, var(--accent) 45%, var(--db-ghost));
+}
+
+.db-edge.open:hover::before {
+  background: color-mix(in srgb, var(--turn-c) 60%, var(--db-ghost));
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--turn-e) 50%, transparent);
+}
+
+/* The inset --pe ring keeps light player colours (tournament's ivory) visible
+   on the light board — same trick as the checkers piece edge. */
+.db-edge.drawn::before {
+  background: var(--pc);
+  box-shadow: inset 0 0 0 1.5px var(--pe);
+}
+
+.db-h.drawn::before {
+  animation: db-draw-h 0.2s ease-out;
+}
+
+.db-v.drawn::before {
+  animation: db-draw-v 0.2s ease-out;
+}
+
+@keyframes db-draw-h {
+  from {
+    transform: scaleX(0.15);
+    opacity: 0.4;
+  }
+}
+
+@keyframes db-draw-v {
+  from {
+    transform: scaleY(0.15);
+    opacity: 0.4;
+  }
+}
+
+.db-edge.last::before {
+  box-shadow:
+    0 0 0 2px var(--accent),
+    inset 0 0 0 1.5px var(--pe);
+}
+
+.db-box {
+  position: relative;
+}
+
+.db-box.owned {
+  background: color-mix(in srgb, var(--pc) 32%, var(--db-bg));
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--pe) 65%, transparent);
+}
+
+.db-box.flash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+  animation: sowflash 0.7s ease-out var(--d, 0ms) both;
+}
+
+[data-theme='midnight'] .db-edge.drawn::before {
+  box-shadow: 0 0 6px color-mix(in srgb, var(--pc) 55%, transparent);
+}
+
+/* Lobby thumbnail: a claimed box in each player's colour. */
+.mini.big.db-thumb {
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--pc) 30%, var(--db-bg));
+  box-shadow: inset 0 0 0 3px var(--pc);
+}
+
+.db-thumb-1 {
+  --pc: var(--p1);
+}
+
+.db-thumb-2 {
+  --pc: var(--p2);
 }
 
 /* ----------------------------------------------------------- player panel */

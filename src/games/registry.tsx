@@ -10,6 +10,8 @@ import { mancalaHelp } from './mancala/help';
 import { UtttGame } from './uttt/UtttGame';
 import { utttHelp } from './uttt/help';
 import { Mark } from './uttt/Mark';
+import { DotsBoxesGame } from './dotsboxes/DotsBoxesGame';
+import { dotsBoxesHelp } from './dotsboxes/help';
 
 /**
  * The single list of games. Adding a game means adding one entry to `GAMES`
@@ -95,6 +97,20 @@ export const GAMES = [
     help: utttHelp,
     Component: UtttGame,
   },
+  {
+    id: 'dots-boxes',
+    title: 'Dots & Boxes',
+    // The engine plays 2-4; the card says 2 until GameShell can seat more.
+    meta: '2 players',
+    thumb: (
+      <>
+        <span className="mini big db-thumb db-thumb-1" />
+        <span className="mini big db-thumb db-thumb-2" />
+      </>
+    ),
+    help: dotsBoxesHelp,
+    Component: DotsBoxesGame,
+  },
 ] as const satisfies readonly GameEntry[];
 
 export type GameId = (typeof GAMES)[number]['id'];
@@ -110,7 +126,6 @@ export interface ComingSoonEntry {
 export const COMING_SOON: ComingSoonEntry[] = [
   { id: 'chess', title: 'Chess', meta: '2 players', glyph: '♞' },
   { id: 'morris', title: 'Nine Men’s Morris', meta: '2 players', glyph: '▣' },
-  { id: 'dots-boxes', title: 'Dots & Boxes', meta: '2–4 players', glyph: '∷' },
   { id: 'yacht', title: 'Yacht Dice', meta: '2–4 players', glyph: '⚄⚁' },
   { id: 'boggle', title: 'Boggle', meta: '2–4 players', glyph: 'B', glyphClass: 'tile' },
 ];

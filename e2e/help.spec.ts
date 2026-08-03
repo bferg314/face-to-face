@@ -8,6 +8,10 @@ const GAMES = [
     name: 'Ultimate Tic-Tac-Toe',
     sections: ['Placing marks', 'Where you must play', 'Free moves', 'Winning'],
   },
+  {
+    name: 'Dots & Boxes',
+    sections: ['Drawing lines', 'Claiming boxes', 'Extra turns', 'Winning'],
+  },
 ];
 
 for (const { name, sections } of GAMES) {
