@@ -28,6 +28,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 /** Props every game screen takes. */
 export interface GameProps {
   settings: Settings;
+  /** Games that are reshaped by a setting watch this to react when the
+      player closes Settings, rather than mid-edit. */
+  settingsOpen: boolean;
   onExit: () => void;
   onOpenSettings: () => void;
 }

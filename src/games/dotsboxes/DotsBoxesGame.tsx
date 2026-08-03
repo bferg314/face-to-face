@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import {
   applyMove,
@@ -13,6 +13,7 @@ import {
   type DotsBoxesState,
   type PlayerId,
 } from './engine';
+import { ConfirmModal } from '../../components/ConfirmModal';
 import { GameShell } from '../../components/GameShell';
 import { PlayerPanel } from '../../components/PlayerPanel';
 import { useGameHistory } from '../../hooks/useGameHistory';
@@ -21,10 +22,12 @@ import type { Settings } from '../../settings';
 
 export function DotsBoxesGame({
   settings,
+  settingsOpen,
   onExit,
   onOpenSettings,
 }: {
   settings: Settings;
+  settingsOpen: boolean;
   onExit: () => void;
   onOpenSettings: () => void;
 }) {
@@ -36,6 +39,45 @@ export function DotsBoxesGame({
   );
   const { state, past } = history;
   const { size } = state;
+
+  // The board shape the live game was dealt. Compared against settings when
+  // Settings closes, and moved forward once we've acted on a change — so
+  // declining the restart doesn't re-ask on the next unrelated visit.
+  const dealt = useRef({
+    players: settings.dotsBoxesPlayers,
+    size: settings.dotsBoxesSize,
+  });
+  const [restartPrompt, setRestartPrompt] = useState<string | null>(null);
+
+  // Changing the player count or board size reshapes the board, so it can't
+  // take effect on the game in front of you the way a rule toggle can. Waiting
+  // for Settings to close keeps the prompt from firing mid-edit, and keeps it
+  // from appearing behind the settings modal.
+  useEffect(() => {
+    if (settingsOpen) return;
+    const was = dealt.current;
+    const now = {
+      players: settings.dotsBoxesPlayers,
+      size: settings.dotsBoxesSize,
+    };
+    if (was.players === now.players && was.size === now.size) return;
+    dealt.current = now;
+
+    if (!history.gameInProgress) {
+      history.newMatch();
+      return;
+    }
+    setRestartPrompt(
+      was.players !== now.players && was.size !== now.size
+        ? 'Restart with the new settings?'
+        : was.players !== now.players
+          ? `Restart with ${now.players} players?`
+          : `Restart on a ${now.size} × ${now.size} board?`,
+    );
+    // Keyed to the open/closed edge only: `history` is a fresh object every
+    // render, so a full dependency list would re-run this constantly and
+    // compare against a ref we just moved forward.
+  }, [settingsOpen]);
 
   const open = useMemo(() => new Set(legalEdges(state)), [state]);
   const score = useMemo(() => scores(state), [state]);
@@ -139,57 +181,72 @@ export function DotsBoxesGame({
   const tracks = `var(--db-t)${' 1fr var(--db-t)'.repeat(size)}`;
 
   return (
-    <GameShell
-      viewMode={settings.viewMode}
-      gameInProgress={history.gameInProgress}
-      undoDisabled={history.undoDisabled}
-      help={dotsBoxesHelp}
-      onExit={onExit}
-      onOpenSettings={onOpenSettings}
-      onNewGame={history.newMatch}
-      onUndo={history.undo}
-      panels={players.map((p) => (
-        <DbPanel key={p} player={p} state={state} score={score[p]} />
-      ))}
-    >
-      <div className="board-frame">
-        <div className="board-inner">
-          <div
-            className="db-board"
-            style={
-              {
-                gridTemplate: `${tracks} / ${tracks}`,
-                '--turn-c': `var(--p${state.turn})`,
-                '--turn-e': `var(--p${state.turn}-edge)`,
-              } as CSSProperties
-            }
-          >
-            {cells}
-          </div>
+    <>
+      <GameShell
+        viewMode={settings.viewMode}
+        gameInProgress={history.gameInProgress}
+        undoDisabled={history.undoDisabled}
+        help={dotsBoxesHelp}
+        onExit={onExit}
+        onOpenSettings={onOpenSettings}
+        onNewGame={history.newMatch}
+        onUndo={history.undo}
+        panels={players.map((p) => (
+          <DbPanel key={p} player={p} state={state} score={score[p]} />
+        ))}
+      >
+        <div className="board-frame">
+          <div className="board-inner">
+            <div
+              className="db-board"
+              style={
+                {
+                  gridTemplate: `${tracks} / ${tracks}`,
+                  '--turn-c': `var(--p${state.turn})`,
+                  '--turn-e': `var(--p${state.turn}-edge)`,
+                } as CSSProperties
+              }
+            >
+              {cells}
+            </div>
 
-          {state.winner && (
-            <div className="win-overlay">
-              <div className="win-card">
-                <div className="win-title">
-                  {state.winner === 'draw'
-                    ? 'It’s a draw!'
-                    : `Player ${state.winner} wins!`}
-                </div>
-                <p className="win-score">
-                  {players.map((p) => score[p]).join(' – ')}
-                </p>
-                <div className="win-actions">
-                  <button onClick={history.newMatch}>Rematch</button>
-                  <button className="secondary" onClick={onExit}>
-                    Home
-                  </button>
+            {state.winner && (
+              <div className="win-overlay">
+                <div className="win-card">
+                  <div className="win-title">
+                    {state.winner === 'draw'
+                      ? 'It’s a draw!'
+                      : `Player ${state.winner} wins!`}
+                  </div>
+                  <p className="win-score">
+                    {players.map((p) => score[p]).join(' – ')}
+                  </p>
+                  <div className="win-actions">
+                    <button onClick={history.newMatch}>Rematch</button>
+                    <button className="secondary" onClick={onExit}>
+                      Home
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </GameShell>
+      </GameShell>
+
+      {restartPrompt && (
+        <ConfirmModal
+          title={restartPrompt}
+          text="The game in progress will be lost."
+          confirmLabel="Restart"
+          onConfirm={() => {
+            setRestartPrompt(null);
+            history.newMatch();
+          }}
+          onCancel={() => setRestartPrompt(null)}
+        />
+      )}
+    </>
   );
 }
 

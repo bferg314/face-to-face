@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import type { ViewMode } from '../settings';
+import { ConfirmModal } from './ConfirmModal';
 import { HelpModal, type GameHelp } from './HelpModal';
 
 /**
@@ -124,28 +125,17 @@ export function GameShell({
       {help && helpOpen && <HelpModal help={help} onClose={() => setHelpOpen(false)} />}
 
       {confirming && (
-        <div className="modal-backdrop" onClick={() => setConfirming(null)}>
-          <div className="modal confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="confirm-title">
-              {confirming === 'new' ? 'Start a new game?' : 'Leave this game?'}
-            </div>
-            <p className="confirm-text">The game in progress will be lost.</p>
-            <div className="win-actions">
-              <button
-                onClick={() => {
-                  setConfirming(null);
-                  if (confirming === 'new') onNewGame();
-                  else onExit();
-                }}
-              >
-                {confirming === 'new' ? 'New game' : 'Go home'}
-              </button>
-              <button className="secondary" onClick={() => setConfirming(null)}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmModal
+          title={confirming === 'new' ? 'Start a new game?' : 'Leave this game?'}
+          text="The game in progress will be lost."
+          confirmLabel={confirming === 'new' ? 'New game' : 'Go home'}
+          onConfirm={() => {
+            setConfirming(null);
+            if (confirming === 'new') onNewGame();
+            else onExit();
+          }}
+          onCancel={() => setConfirming(null)}
+        />
       )}
     </div>
   );
