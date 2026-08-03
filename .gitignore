@@ -3,3 +3,7 @@ dist/
 *.local
 test-results/
 playwright-report/
+
+# Per-machine Claude Code permissions. Not covered by *.local above, which
+# only matches names ending in .local.
+.claude/settings.local.json
