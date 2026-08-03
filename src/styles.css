@@ -1369,6 +1369,30 @@ button {
   font-size: 1.3rem;
 }
 
+/* Settings that reach only one game are fenced off under its name, so it
+   reads at a glance what a control will and won't affect. */
+.settings-section.for-game {
+  margin-top: 22px;
+  padding-top: 4px;
+  border-top: 1px solid var(--panel-border);
+}
+
+.section-title {
+  margin-top: 16px;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.settings-section.for-game .section-title {
+  color: var(--accent);
+}
+
+/* The section heading already names the game, so its first group sits
+   directly under it rather than opening another gap. */
+.section-title + .setting-group {
+  margin-top: 10px;
+}
+
 .setting-group {
   margin-top: 18px;
 }
