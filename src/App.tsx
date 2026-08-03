@@ -19,6 +19,7 @@ export default function App() {
       {active ? (
         <active.Component
           settings={settings}
+          settingsOpen={settingsOpen}
           onExit={() => setScreen('home')}
           onOpenSettings={() => setSettingsOpen(true)}
         />

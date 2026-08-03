@@ -65,8 +65,10 @@ export function ReversiGame({
       onOpenSettings={onOpenSettings}
       onNewGame={history.newMatch}
       onUndo={history.undo}
-      panel1={<ReversiPanel player={1} state={state} score={score[1]} />}
-      panel2={<ReversiPanel player={2} state={state} score={score[2]} />}
+      panels={[
+        <ReversiPanel key={1} player={1} state={state} score={score[1]} />,
+        <ReversiPanel key={2} player={2} state={state} score={score[2]} />,
+      ]}
     >
       <div className="board-frame">
         <div className="board-inner">

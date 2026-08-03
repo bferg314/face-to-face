@@ -94,8 +94,10 @@ export function MancalaGame({
       onOpenSettings={onOpenSettings}
       onNewGame={history.newMatch}
       onUndo={history.undo}
-      panel1={<MancalaPanel player={1} state={state} />}
-      panel2={<MancalaPanel player={2} state={state} />}
+      panels={[
+        <MancalaPanel key={1} player={1} state={state} />,
+        <MancalaPanel key={2} player={2} state={state} />,
+      ]}
     >
       <div className="board-frame mn-frame">
         <div className="board-inner">

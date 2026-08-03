@@ -18,13 +18,16 @@ designed for a tablet or laptop lying flat on the table between players.
   you play decides which board your opponent plays in next. Free moves when
   you're sent to a board that's already finished, closed boards once won, and
   a draw when every board is decided with no line.
-- **Dots & Boxes** — complete a box to claim it and move again, with chains,
-  double-box lines, and a choice of 4×4, 6×6, or 8×8 boards. The engine
-  already plays 2–4 players; the screen seats two until the shell learns more
-  seating layouts.
-- **Two seating layouts** for 2-player games:
-  - *Across the table* — the far player's panel is rotated 180° to face them.
-  - *Side by side* — both player panels face the same direction.
+- **Dots & Boxes** for 2–4 players — complete a box to claim it and move
+  again, with chains, double-box lines, and a choice of 4×4, 6×6, or 8×8
+  boards.
+- **Seating that faces the players.** Every panel is turned to read right way
+  up from its own chair:
+  - *2 players* choose between **across the table** (the far panel rotated
+    180°) and **side by side** (both panels facing the same way).
+  - *3–4 players* sit around the board — bottom, left, top, and right, so play
+    passes around the table rather than across it. On a phone the ring
+    collapses to a stack and the side panels give up their rotation.
 - **Style customization** — four board themes (Walnut, Tournament, Midnight,
   Porcelain) and three piece styles (Classic, Flat, Glass), persisted in the
   browser.
@@ -60,7 +63,7 @@ docker run -d -p 8080:80 face-to-face
 - `src/games/<game>/<Game>Game.tsx` — the game's UI: board and player panels.
 - `src/games/<game>/help.ts` — the game's "How to play" content.
 - `src/components/GameShell.tsx` — shared frame: control rail, seating
-  layouts (including rotating the far player's panel), confirm dialogs.
+  layouts (it takes one panel per player and picks each seat), confirm dialogs.
 - `src/components/PlayerPanel.tsx` — shared player panel; games supply their
   own status wording.
 - `src/hooks/useGameHistory.ts` — the state and undo stack every game shares.

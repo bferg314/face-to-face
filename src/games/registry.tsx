@@ -28,6 +28,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 /** Props every game screen takes. */
 export interface GameProps {
   settings: Settings;
+  /** Games that are reshaped by a setting watch this to react when the
+      player closes Settings, rather than mid-edit. */
+  settingsOpen: boolean;
   onExit: () => void;
   onOpenSettings: () => void;
 }
@@ -100,8 +103,7 @@ export const GAMES = [
   {
     id: 'dots-boxes',
     title: 'Dots & Boxes',
-    // The engine plays 2-4; the card says 2 until GameShell can seat more.
-    meta: '2 players',
+    meta: '2–4 players',
     thumb: (
       <>
         <span className="mini big db-thumb db-thumb-1" />
