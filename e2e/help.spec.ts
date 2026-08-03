@@ -12,6 +12,10 @@ const GAMES = [
     name: 'Dots & Boxes',
     sections: ['Drawing lines', 'Claiming boxes', 'Extra turns', 'Winning'],
   },
+  {
+    name: 'Chess',
+    sections: ['Moving', 'Special moves', 'Check & checkmate', 'Winning'],
+  },
 ];
 
 for (const { name, sections } of GAMES) {

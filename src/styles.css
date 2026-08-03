@@ -1161,6 +1161,154 @@ button {
   --pc: var(--p2);
 }
 
+/* ------------------------------------------------------------------ chess */
+
+/* Chess is the first game here whose pieces have an "up" — a checker, a disc,
+   a cross and a claimed box all survive being looked at from the far chair,
+   and the uttt and Dots & Boxes sections above say so. So the board turns to
+   face whoever is to move: the geometry never changes (a1 is bottom-left from
+   either seat, and nothing changes place) and only the glyphs rotate.
+
+   `.flipped` is set by the game component rather than keyed off `.game.across`
+   here, because the promotion picker renders outside the shell — where that
+   ancestor is out of reach — and has to agree with the board. */
+
+.cp {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: var(--pc);
+  /* A darker cast of the piece's own colour, so a pale army still has a
+     silhouette on a pale square: Tournament's Player 2 is very nearly the
+     colour of the light squares, and an unoutlined piece would vanish. */
+  stroke: color-mix(in srgb, var(--pc) 32%, #000);
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+}
+
+/* The eye of the knight and the cross on the bishop: the outline colour, laid
+   on solid, so they read as markings rather than as holes. */
+.cp .ink {
+  fill: color-mix(in srgb, var(--pc) 32%, #000);
+  stroke: none;
+}
+
+.pieces.chess .cp {
+  position: absolute;
+  /* Inset off the square's edge so neighbouring pieces don't touch. */
+  inset: 5%;
+  /* Its own transform, on its own element: the wrapper is already animating a
+     translate, and one property can't carry both the slide and the turn. */
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1.15);
+}
+
+.pieces.chess.flipped .cp {
+  transform: rotate(180deg);
+}
+
+/* Midnight gives its pieces a soft neon glow, as it does the checkers discs. */
+[data-theme='midnight'] .pieces.chess .cp {
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--pc) 65%, transparent));
+}
+
+/* The king in check. Not gated on the hint setting: leaving it there is
+   illegal, so this states a rule rather than offering advice — the same
+   reasoning as the uttt playable-board ring. */
+.sq.check::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(224, 82, 82, 0.85),
+    transparent 70%
+  );
+}
+
+/* A piece drawn on a panel rather than on a board square. The board can rely
+   on a player's colour contrasting with the squares, because the themes are
+   built that way; a panel cannot — Walnut's Player 2 is very nearly the colour
+   of the panel itself, and would sink into it. An outline in the panel's own
+   text colour guarantees a silhouette without washing the colour out. */
+.cp.on-panel {
+  stroke: var(--text);
+  stroke-width: 1.1;
+}
+
+/* Captured pieces are drawn rather than tallied: which piece it was is the
+   whole point. A full army is fifteen of them, so the row clips rather than
+   stretching the panel. */
+.chess-tray {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.cp.taken {
+  width: 17px;
+  height: 17px;
+  margin-left: -2px;
+  flex-shrink: 0;
+}
+
+.promo-modal {
+  width: auto;
+  text-align: center;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1.15);
+}
+
+.promo-modal.flipped {
+  transform: rotate(180deg);
+}
+
+.promo-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.promo-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 76px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 1.5px solid var(--panel-border);
+  border-radius: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.promo-opt:hover {
+  border-color: var(--accent);
+}
+
+.promo-opt .cp {
+  width: 40px;
+  height: 40px;
+}
+
+.promo-opt small {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* Lobby thumbnail: a knight in each player's colour, on the `.mini.big`
+   footprint the other games' thumbnails use. */
+.cp.cp-thumb {
+  width: 34px;
+  height: 34px;
+}
+
+.cp-thumb-1 {
+  --pc: var(--p1);
+}
+
+.cp-thumb-2 {
+  --pc: var(--p2);
+}
+
 /* ----------------------------------------------------------- player panel */
 
 .panel {
