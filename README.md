@@ -3,8 +3,8 @@
 A web-based collection of table games for 2–4 people sharing one screen —
 designed for a tablet or laptop lying flat on the table between players.
 
-**Games:** Checkers, Reversi, Mancala, Ultimate Tic-Tac-Toe, and Dots & Boxes
-(playable now) · Chess, Nine Men's Morris, Yacht Dice, and Boggle (planned)
+**Games:** Checkers, Reversi, Mancala, Ultimate Tic-Tac-Toe, Dots & Boxes, and
+Chess (playable now) · Nine Men's Morris, Yacht Dice, and Boggle (planned)
 
 ## Features
 
@@ -21,6 +21,10 @@ designed for a tablet or laptop lying flat on the table between players.
 - **Dots & Boxes** for 2–4 players — complete a box to claim it and move
   again, with chains, double-box lines, and a choice of 4×4, 6×6, or 8×8
   boards.
+- **Chess** with full rules: castling, en passant, promotion to any piece,
+  check and checkmate, and every draw — stalemate, threefold repetition, the
+  fifty-move rule, and insufficient material. The board turns to face whoever
+  is to move, so the player thinking reads both armies the right way up.
 - **Seating that faces the players.** Every panel is turned to read right way
   up from its own chair:
   - *2 players* choose between **across the table** (the far panel rotated
