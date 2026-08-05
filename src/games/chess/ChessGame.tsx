@@ -35,6 +35,13 @@ const PROMOTION_NAME: Record<PromotionType, string> = {
 const colourVars = (player: PlayerId) =>
   ({ '--pc': `var(--p${player})` }) as CSSProperties;
 
+/** Move dots belong to whoever is moving, so they carry that player's colour. */
+const turnVars = (player: PlayerId) =>
+  ({
+    '--turn-c': `var(--p${player})`,
+    '--turn-e': `var(--p${player}-edge)`,
+  }) as CSSProperties;
+
 /** The material each player is up, in pawns. Positive means Player 1 leads. */
 function materialEdge(state: ChessState): number {
   const held = (p: PlayerId) =>
@@ -188,7 +195,9 @@ export function ChessGame({
       >
         <div className="board-frame">
           <div className="board-inner">
-            <div className="board">{squares}</div>
+            <div className="board" style={turnVars(state.turn)}>
+              {squares}
+            </div>
             <div className={`pieces chess${flipped ? ' flipped' : ''}`}>
               {state.board.map(
                 (cell, i) =>
