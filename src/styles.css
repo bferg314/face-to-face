@@ -71,6 +71,11 @@ button {
   --cc-hole: #b98d5c;
   --c4-bg: #6b4a8c;
   --c4-hole: #2a1f38;
+  --on-sq: #e9d3a5;
+  --on-line: #b98d5c;
+  --on-card: #3a2c1e;
+  --on-card-bg: #55442f;
+  --on-pip: #e8a94b;
 }
 
 [data-theme='tournament'] {
@@ -111,6 +116,11 @@ button {
   --cc-hole: #9fb3a3;
   --c4-bg: #2f6b50;
   --c4-hole: #14291f;
+  --on-sq: #efe6c9;
+  --on-line: #a8b6a6;
+  --on-card: #1a3026;
+  --on-card-bg: #2f4c3d;
+  --on-pip: #ffd75e;
 }
 
 [data-theme='midnight'] {
@@ -151,6 +161,11 @@ button {
   --cc-hole: #3a4877;
   --c4-bg: #242e52;
   --c4-hole: #0b0f1e;
+  --on-sq: #26304f;
+  --on-line: #3c4870;
+  --on-card: #131a30;
+  --on-card-bg: #242e52;
+  --on-pip: #58e0ff;
 }
 
 [data-theme='porcelain'] {
@@ -191,6 +206,11 @@ button {
   --cc-hole: #c9c2b0;
   --c4-bg: #7d8fa0;
   --c4-hole: #e8e4da;
+  --on-sq: #faf6ea;
+  --on-line: #c9c2b0;
+  --on-card: #ddd5c2;
+  --on-card-bg: #f2eee3;
+  --on-pip: #c07a3e;
 }
 
 /* Midnight pieces get a soft neon glow. */
@@ -1219,6 +1239,282 @@ button {
 
 .db-thumb-2 {
   --pc: var(--p2);
+}
+
+/* ---------------------------------------------------------------- onitama */
+
+/* The spare card sits beside the board, as it does on the table. The board
+   half is its own size container, so `.board-frame`'s min(100cqw, 100cqh)
+   still measures the space the board actually has. */
+.on-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.5cqw, 16px);
+  width: 100%;
+  height: 100%;
+}
+
+/* A spacer the width of the spare card, so the board sits centred under the
+   panels rather than pushed off to one side by it. */
+.on-table::after {
+  content: '';
+  flex: 0 0 auto;
+  width: var(--on-side-w);
+}
+
+.on-side {
+  width: var(--on-side-w);
+}
+
+.on-board-wrap {
+  container-type: size;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.on-table {
+  --on-side-w: 76px;
+}
+
+.on-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.on-side-label {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+  max-width: 9ch;
+  line-height: 1.2;
+}
+
+.on-board {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template: repeat(5, 1fr) / repeat(5, 1fr);
+  gap: 2px;
+  background: var(--on-line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.on-sq {
+  position: relative;
+  background: var(--on-sq);
+}
+
+/* The two arches: where each Master starts, and what the other one is aiming
+   at. Ringed rather than filled, so a piece standing on one still reads. */
+.on-sq.arch::before {
+  content: '';
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 2px dashed color-mix(in srgb, var(--arch-c) 70%, transparent);
+}
+
+.on-sq.arch-1 {
+  --arch-c: var(--p1);
+}
+
+.on-sq.arch-2 {
+  --arch-c: var(--p2);
+}
+
+.on-piece {
+  position: absolute;
+  inset: 12%;
+  z-index: 1;
+}
+
+.on-piece .checker {
+  inset: 0;
+}
+
+/* The Master wears the same gold the checkers kings do — the one piece the
+   whole game is about should never be mistaken for a Student. */
+.on-piece.master .checker {
+  box-shadow: 0 0 0 3px var(--crown);
+}
+
+.on-piece.master::after {
+  content: '';
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: var(--crown);
+  z-index: 1;
+}
+
+.on-sq.movable,
+.on-sq.sel,
+.on-sq.dest {
+  cursor: pointer;
+}
+
+.on-sq.movable::after,
+.on-sq.sel::after {
+  content: '';
+  position: absolute;
+  inset: 4%;
+  border-radius: 8%;
+  pointer-events: none;
+}
+
+.on-sq.movable::after {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--turn-c) 50%, transparent);
+}
+
+.on-sq.sel::after {
+  box-shadow:
+    inset 0 0 0 3px var(--turn-c),
+    inset 0 0 0 4.5px color-mix(in srgb, var(--turn-e) 55%, transparent);
+}
+
+.on-sq.dest::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--turn-c) 85%, transparent);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--turn-e) 60%, transparent),
+    0 0 8px color-mix(in srgb, var(--turn-c) 55%, transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* A square you can take a piece on: the ring the other games use for a
+   capture, around the piece rather than a dot over it. */
+.on-sq.dest.take::after {
+  width: 76%;
+  height: 76%;
+  background: transparent;
+  border: 3px solid #e05252;
+  box-shadow: 0 0 10px rgba(224, 82, 82, 0.55);
+}
+
+.on-sq.last {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* ------------------------------------------------------------ the cards */
+
+.on-hand {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.on-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 6px;
+  border: 1.5px solid var(--panel-border);
+  border-radius: 9px;
+  background: var(--on-card);
+  color: var(--muted);
+  cursor: default;
+}
+
+.on-card small {
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.on-card.pickable {
+  cursor: pointer;
+  border-color: color-mix(in srgb, var(--pc) 55%, var(--panel-border));
+}
+
+.on-card.pickable:hover {
+  border-color: var(--pc);
+}
+
+/* The card being played this turn. */
+.on-card.armed {
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* Cards with no move in them are dimmed, not hidden — you still need to read
+   what your opponent is about to be handed. */
+.on-card:disabled {
+  opacity: 0.55;
+}
+
+.on-grid {
+  display: grid;
+  grid-template: repeat(5, 1fr) / repeat(5, 1fr);
+  gap: 1.5px;
+  width: 52px;
+  aspect-ratio: 1;
+}
+
+/* Turned for a player whose seat is not: side by side, player 2 reads the
+   screen the same way up but moves down the board. */
+.on-card.flipped .on-grid {
+  rotate: 180deg;
+}
+
+.on-pip {
+  border-radius: 2px;
+  background: var(--on-card-bg);
+}
+
+.on-pip.go {
+  background: var(--on-pip);
+}
+
+.on-pip.here {
+  background: color-mix(in srgb, var(--pc, var(--muted)) 85%, transparent);
+}
+
+/* The spare card belongs to nobody, so it leans on the accent instead. */
+.on-card.next {
+  border-style: dashed;
+}
+
+/* Lobby thumbnail: one movement card. */
+.on-thumb {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* On a phone the spare card tucks under the board with everything else. */
+@media (max-width: 560px) {
+  .on-table {
+    flex-direction: column-reverse;
+    gap: 4px;
+  }
+
+  .on-table::after {
+    display: none;
+  }
+
+  .on-side {
+    flex-direction: row;
+    width: auto;
+    gap: 8px;
+  }
 }
 
 /* ---------------------------------------------------------- connect four */

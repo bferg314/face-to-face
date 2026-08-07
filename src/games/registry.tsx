@@ -15,6 +15,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 import { ChessGame } from './chess/ChessGame';
 import { chessHelp } from './chess/help';
 import { ChessPiece } from './chess/pieces';
+import { OnitamaGame } from './onitama/OnitamaGame';
+import { onitamaHelp } from './onitama/help';
+import { OnitamaThumb } from './onitama/board';
 import { C4Game } from './connectfour/C4Game';
 import { c4Help } from './connectfour/help';
 import { C4Thumb } from './connectfour/board';
@@ -173,6 +176,14 @@ export const GAMES = [
     help: c4Help,
     Component: C4Game,
   },
+  {
+    id: 'onitama',
+    title: 'Onitama',
+    meta: '2 players',
+    thumb: <OnitamaThumb />,
+    help: onitamaHelp,
+    Component: OnitamaGame,
+  },
 ] as const satisfies readonly GameEntry[];
 
 export type GameId = (typeof GAMES)[number]['id'];
@@ -198,6 +209,5 @@ export interface ComingSoonEntry {
 export const COMING_SOON: ComingSoonEntry[] = [
   // Glyphs are kept to shapes with wide font coverage: the chess and shrine
   // characters these reached for first came out as tofu on a bare system.
-  { id: 'onitama', title: 'Onitama', meta: '2 players', glyph: '❖', glyphClass: 'big' },
   { id: 'yacht', title: 'Yacht Dice', meta: '2–4 players', glyph: '⚄⚁' },
 ];

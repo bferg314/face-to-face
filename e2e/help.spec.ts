@@ -17,6 +17,10 @@ const GAMES = [
     sections: ['Moving', 'Special moves', 'Check & checkmate', 'Winning'],
   },
   {
+    name: 'Onitama',
+    sections: ['The cards', 'Your turn', 'Winning'],
+  },
+  {
     name: 'Connect Four',
     sections: ['Dropping', 'Winning', 'Hints'],
   },
