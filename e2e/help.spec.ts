@@ -17,6 +17,10 @@ const GAMES = [
     sections: ['Moving', 'Special moves', 'Check & checkmate', 'Winning'],
   },
   {
+    name: 'Connect Four',
+    sections: ['Dropping', 'Winning', 'Hints'],
+  },
+  {
     name: 'Chinese Checkers',
     sections: ['Moving', 'Jumping', 'The star', 'Winning'],
   },

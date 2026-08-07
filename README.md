@@ -4,8 +4,8 @@ A web-based collection of table games for 2–4 people sharing one screen —
 designed for a tablet or laptop lying flat on the table between players.
 
 **Games:** Checkers, Reversi, Mancala, Ultimate Tic-Tac-Toe, Dots & Boxes,
-Chess, Nine Men's Morris, Quoridor, and Chinese Checkers (playable now) ·
-Onitama, Connect Four, and Yacht Dice (planned)
+Chess, Nine Men's Morris, Quoridor, Chinese Checkers, and Connect Four
+(playable now) · Onitama and Yacht Dice (planned)
 
 ## Features
 
@@ -40,6 +40,10 @@ Onitama, Connect Four, and Yacht Dice (planned)
   step to a touching hole or hop a marble of any colour, with chains that turn
   corners offered as single moves so you can stop wherever you like. Your own
   point is tinted your colour and the one you are running for is ringed in it.
+- **Connect Four** — drop a disc down a column and let gravity place it, four
+  in a row to win. The winning line lights up, a disc falls the distance it
+  actually falls, and with hints on the column that would win for you is
+  marked.
 - **Seating that faces the players.** Every panel is turned to read right way
   up from its own chair:
   - *2 players* choose between **across the table** (the far panel rotated
