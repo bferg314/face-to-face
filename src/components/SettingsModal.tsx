@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type {
+  CcPlayers,
   DotsBoxesPlayers,
   DotsBoxesSize,
   PieceStyle,
@@ -42,6 +43,12 @@ const DB_PLAYERS: Array<{ id: DotsBoxesPlayers; label: string }> = [
 const QD_PLAYERS: Array<{ id: QuoridorPlayers; label: string; hint: string }> = [
   { id: 2, label: '2', hint: 'Ten walls each' },
   { id: 4, label: '4', hint: 'Five walls each' },
+];
+
+const CC_PLAYERS: Array<{ id: CcPlayers; label: string; hint: string }> = [
+  { id: 2, label: '2', hint: 'Facing points' },
+  { id: 3, label: '3', hint: 'Every other point' },
+  { id: 4, label: '4', hint: 'Two facing pairs' },
 ];
 
 const p1Vars = { '--pc': 'var(--p1)', '--pe': 'var(--p1-edge)' } as CSSProperties;
@@ -181,6 +188,26 @@ export function SettingsModal({
                 <span className="knob" />
               </span>
             </label>
+          </div>
+        </Section>
+
+        <Section title="Chinese Checkers" game>
+          <div className="setting-group">
+            <span className="group-title">Players</span>
+            <div className="opt-row">
+              {CC_PLAYERS.map((p) => (
+                <button
+                  key={p.id}
+                  className={`opt ${settings.ccPlayers === p.id ? 'selected' : ''}`}
+                  onClick={() => set('ccPlayers', p.id)}
+                >
+                  <span>
+                    {p.label}
+                    <small>{p.hint}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </Section>
 

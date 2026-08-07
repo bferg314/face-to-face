@@ -4,6 +4,7 @@ export type ViewMode = 'across' | 'side-by-side';
 export type DotsBoxesSize = 4 | 6 | 8;
 export type DotsBoxesPlayers = 2 | 3 | 4;
 export type QuoridorPlayers = 2 | 4;
+export type CcPlayers = 2 | 3 | 4;
 
 export interface Settings {
   theme: ThemeId;
@@ -19,6 +20,8 @@ export interface Settings {
   morrisFlying: boolean;
   /** Quoridor player count. Applies from the next game. */
   quoridorPlayers: QuoridorPlayers;
+  /** Chinese Checkers player count. Applies from the next game. */
+  ccPlayers: CcPlayers;
 }
 
 export const defaultSettings: Settings = {
@@ -31,6 +34,7 @@ export const defaultSettings: Settings = {
   dotsBoxesPlayers: 2,
   morrisFlying: true,
   quoridorPlayers: 2,
+  ccPlayers: 2,
 };
 
 const STORAGE_KEY = 'face-to-face-settings';

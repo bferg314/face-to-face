@@ -15,6 +15,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 import { ChessGame } from './chess/ChessGame';
 import { chessHelp } from './chess/help';
 import { ChessPiece } from './chess/pieces';
+import { CcGame } from './chinesecheckers/CcGame';
+import { ccHelp } from './chinesecheckers/help';
+import { CcThumb } from './chinesecheckers/board';
 import { QuoridorGame } from './quoridor/QuoridorGame';
 import { quoridorHelp } from './quoridor/help';
 import { QuoridorThumb } from './quoridor/board';
@@ -151,6 +154,14 @@ export const GAMES = [
     help: quoridorHelp,
     Component: QuoridorGame,
   },
+  {
+    id: 'chinese-checkers',
+    title: 'Chinese Checkers',
+    meta: '2–4 players',
+    thumb: <CcThumb />,
+    help: ccHelp,
+    Component: CcGame,
+  },
 ] as const satisfies readonly GameEntry[];
 
 export type GameId = (typeof GAMES)[number]['id'];
@@ -176,13 +187,6 @@ export interface ComingSoonEntry {
 export const COMING_SOON: ComingSoonEntry[] = [
   // Glyphs are kept to shapes with wide font coverage: the chess and shrine
   // characters these reached for first came out as tofu on a bare system.
-  {
-    id: 'chinese-checkers',
-    title: 'Chinese Checkers',
-    meta: '2–4 players',
-    glyph: '✶',
-    glyphClass: 'big',
-  },
   { id: 'onitama', title: 'Onitama', meta: '2 players', glyph: '❖', glyphClass: 'big' },
   { id: 'connect-four', title: 'Connect Four', meta: '2 players', glyph: '●○' },
   { id: 'yacht', title: 'Yacht Dice', meta: '2–4 players', glyph: '⚄⚁' },
