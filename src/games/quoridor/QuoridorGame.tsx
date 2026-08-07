@@ -314,7 +314,20 @@ function QuoridorPanel({
             : 'Waiting…';
 
   return (
-    <PlayerPanel player={player} active={active} won={won} status={status} score={walls}>
+    <PlayerPanel
+      player={player}
+      active={active}
+      won={won}
+      status={status}
+      // Captioned: every other game's number is a score, and this one is a
+      // stock of walls still in hand.
+      score={
+        <>
+          {walls}
+          <small>{walls === 1 ? 'wall' : 'walls'}</small>
+        </>
+      }
+    >
       {steps !== null && (
         <span className="qd-steps">
           {steps} step{steps === 1 ? '' : 's'}
