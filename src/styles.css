@@ -65,6 +65,8 @@ button {
   --db-ghost: #c8ab7a;
   --mm-bg: #e9d3a5;
   --mm-line: #8a5a33;
+  --qd-bg: #7a4e2c;
+  --qd-cell: #e9d3a5;
 }
 
 [data-theme='tournament'] {
@@ -99,6 +101,8 @@ button {
   --db-ghost: #cdbf9b;
   --mm-bg: #efe6c9;
   --mm-line: #34715a;
+  --qd-bg: #2b4a3c;
+  --qd-cell: #efe6c9;
 }
 
 [data-theme='midnight'] {
@@ -133,6 +137,8 @@ button {
   --db-ghost: #2b3760;
   --mm-bg: #1c2440;
   --mm-line: #46578f;
+  --qd-bg: #10162c;
+  --qd-cell: #26304f;
 }
 
 [data-theme='porcelain'] {
@@ -167,6 +173,8 @@ button {
   --db-ghost: #d8d0bd;
   --mm-bg: #faf6ea;
   --mm-line: #8b98a4;
+  --qd-bg: #b3ab95;
+  --qd-cell: #faf6ea;
 }
 
 /* Midnight pieces get a soft neon glow. */
@@ -1183,6 +1191,182 @@ button {
 
 .db-thumb-2 {
   --pc: var(--p2);
+}
+
+/* --------------------------------------------------------------- quoridor */
+
+/* No `.across` rules: the board carries no text, and each player's goal side
+   is tinted their own colour, so it reads the same from any chair. */
+
+.qd-board,
+.qd-walls {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  /* The track list itself is inline in the component — `repeat()` can't take
+     a var count — but the groove thickness lives here. */
+  --qd-t: clamp(7px, 2.4cqw, 18px);
+  padding: var(--qd-t);
+  background: var(--qd-bg);
+  gap: 0;
+}
+
+/* Walls and the pawn preview ride above the board and must not eat the taps
+   aimed at the cells and grooves underneath. */
+.qd-walls {
+  background: none;
+  pointer-events: none;
+}
+
+.qd-cell {
+  background: var(--qd-cell);
+  border-radius: 12%;
+  position: relative;
+}
+
+/* The finish line, marked along the outer edge of each goal cell in that
+   player's colour. A bar rather than a tint over the cell: tournament's ivory
+   all but disappears washed into a cream board, and a corner cell in the
+   four-player game is the finish for two players at once. */
+.qd-goal {
+  position: absolute;
+  border-radius: 99px;
+  background: var(--pc);
+  box-shadow: inset 0 0 0 1px var(--pe);
+}
+
+.qd-goal-top {
+  inset: 7% 18% auto 18%;
+  height: 9%;
+}
+
+.qd-goal-bottom {
+  inset: auto 18% 7% 18%;
+  height: 9%;
+}
+
+.qd-goal-left {
+  inset: 18% auto 18% 7%;
+  width: 9%;
+}
+
+.qd-goal-right {
+  inset: 18% 7% 18% auto;
+  width: 9%;
+}
+
+.qd-cell.last {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.qd-cell.dest {
+  cursor: pointer;
+}
+
+/* Where the pawn can go, in the colour of whoever is moving. */
+.qd-cell.dest::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--turn-c) 85%, transparent);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--turn-e) 60%, transparent),
+    0 0 8px color-mix(in srgb, var(--turn-c) 55%, transparent);
+}
+
+.qd-pawn {
+  position: absolute;
+  inset: 9%;
+}
+
+.qd-pawn .checker {
+  inset: 0;
+}
+
+/* A groove segment: the tap target for the wall that starts there. The little
+   squares where two grooves cross stay dead, so a tap is never ambiguous
+   between a wall one way and a wall the other. */
+.qd-slot.open {
+  cursor: pointer;
+}
+
+.qd-cross {
+  pointer-events: none;
+}
+
+.qd-wall {
+  border-radius: 99px;
+  align-self: center;
+  justify-self: center;
+}
+
+.qd-wall.qd-h {
+  width: 100%;
+  height: var(--qd-t);
+}
+
+.qd-wall.qd-v {
+  width: var(--qd-t);
+  height: 100%;
+}
+
+/* The inset --pe ring keeps light player colours (tournament's ivory) visible
+   against the board — same trick as the checkers piece edge. */
+.qd-wall.placed {
+  background: var(--pc);
+  box-shadow: inset 0 0 0 1.5px var(--pe);
+  animation: qd-stand 0.18s ease-out;
+}
+
+.qd-wall.placed.last {
+  box-shadow:
+    inset 0 0 0 1.5px var(--pe),
+    0 0 0 2px var(--accent);
+}
+
+@keyframes qd-stand {
+  from {
+    transform: scale(0.4);
+    opacity: 0.3;
+  }
+}
+
+/* What you would get if you tapped here. */
+.qd-wall.ghost {
+  background: color-mix(in srgb, var(--pc) 55%, transparent);
+}
+
+/* And what you cannot: taken, crossed, or shutting somebody out. Outlined
+   rather than filled, so it doesn't read as one more wall in a red player's
+   colour. */
+.qd-wall.ghost.bad {
+  background: color-mix(in srgb, #e05252 30%, transparent);
+  box-shadow: inset 0 0 0 2px #e05252;
+}
+
+[data-theme='midnight'] .qd-wall.placed {
+  box-shadow:
+    inset 0 0 0 1.5px var(--pe),
+    0 0 7px color-mix(in srgb, var(--pc) 55%, transparent);
+}
+
+/* Steps home, next to the walls still in hand. */
+.qd-steps {
+  margin-left: 10px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Lobby thumbnail: a corner of the board, a pawn either side of a wall. */
+.qd-thumb {
+  width: 74px;
+  height: 74px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
 }
 
 /* ------------------------------------------------- nine men's morris */

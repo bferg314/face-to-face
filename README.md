@@ -4,7 +4,7 @@ A web-based collection of table games for 2–4 people sharing one screen —
 designed for a tablet or laptop lying flat on the table between players.
 
 **Games:** Checkers, Reversi, Mancala, Ultimate Tic-Tac-Toe, Dots & Boxes,
-Chess, and Nine Men's Morris (playable now) · Quoridor, Chinese Checkers,
+Chess, Nine Men's Morris, and Quoridor (playable now) · Chinese Checkers,
 Onitama, Connect Four, and Yacht Dice (planned)
 
 ## Features
@@ -31,6 +31,11 @@ Onitama, Connect Four, and Yacht Dice (planned)
   standing in mills of their own, unless every one of them is. Won by cutting
   the other side to two men or leaving them nowhere to go, drawn by repetition
   or fifty quiet moves, with the flying rule for the last three men optional.
+- **Quoridor** for two or four players — race your pawn to the far side while
+  standing two-square walls in everyone's way. Hopping and stepping around a
+  pawn in your path, walls that may never shut a player out entirely (the
+  board only offers the ones that don't), a preview of the wall you're about
+  to stand, and a count of the shortest run home for each player.
 - **Seating that faces the players.** Every panel is turned to read right way
   up from its own chair:
   - *2 players* choose between **across the table** (the far panel rotated
@@ -79,7 +84,7 @@ docker compose -f docker-compose.build.yml up --build -d
 
 ## Releases
 
-Versions are `0.<games>`: **0.5** is the seven games that are playable today,
+Versions are `0.<games>`: **0.5** was the seven games playable at the time,
 each new game adds `.1`, and the collection reaches **1.0** when everything on
 the planned list is in.
 
