@@ -66,12 +66,14 @@ export function YachtGame({
   // thing in the collection, and a Yacht turn is long enough that turning it
   // round costs nothing — the opposite of a game like Connect Four, where the
   // board would spin every few seconds. So the felt turns to face whoever is
-  // deciding, or the winner once there is one, whenever that seat is the one
-  // straight across. Seats to the left and right are left alone: a quarter
-  // turn would have to shrink the card to fit, and someone sitting beside a
-  // score sheet reads it at an angle anyway.
+  // deciding, or the winner once there is one, through whatever angle that
+  // chair sits at. The dice and the Roll button ride round with the card,
+  // which is the point: they sit above the scores, and reaching over an
+  // upside-down tray to pick a box is the awkward part.
   const facing = typeof state.winner === 'number' ? state.winner : state.turn;
-  const turned = seatOf(facing, state.players, settings.viewMode) === 'top';
+  const seat = seatOf(facing, state.players, settings.viewMode);
+  const turn =
+    seat === 'top' || seat === 'left' || seat === 'right' ? ` turn-${seat}` : '';
 
   return (
     <>
@@ -88,7 +90,7 @@ export function YachtGame({
           <YachtPanel key={p} player={p} state={state} total={table[p]} />
         ))}
       >
-        <div className={`yd-table${turned ? ' turned' : ''}`}>
+        <div className={`yd-table${turn}`}>
           <div className="yd-tray">
             <div className="yd-dice">
               {rolled ? (

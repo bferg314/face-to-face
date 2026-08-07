@@ -1283,13 +1283,33 @@ button {
     0 12px 32px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.09);
   overflow: hidden;
-  transition: rotate 0.45s ease;
+  transition:
+    rotate 0.45s ease,
+    width 0.45s ease;
 }
 
-/* Turned to face the chair straight across. Slow on purpose: a turn here
-   lasts long enough that the card should look handed over, not flicked. */
-.yd-table.turned {
+/* Turned to face whoever is deciding. Slow on purpose: a turn here lasts long
+   enough that the card should look handed over, not flicked. The quarter
+   turns match the angles GameShell already gives the side panels, so the felt
+   and that player's own panel end up the same way up. */
+.yd-table.turn-top {
   rotate: 180deg;
+}
+
+.yd-table.turn-left {
+  rotate: 90deg;
+}
+
+.yd-table.turn-right {
+  rotate: -90deg;
+}
+
+/* On its side, the felt's width becomes its height on screen — so it is sized
+   against the board area's height instead, and capped the other way about. */
+.yd-table.turn-left,
+.yd-table.turn-right {
+  width: min(100cqh, 560px);
+  max-height: 100cqw;
 }
 
 .yd-tray {
