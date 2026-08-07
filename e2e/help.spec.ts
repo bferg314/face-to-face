@@ -16,6 +16,10 @@ const GAMES = [
     name: 'Chess',
     sections: ['Moving', 'Special moves', 'Check & checkmate', 'Winning'],
   },
+  {
+    name: 'Nine Men’s Morris',
+    sections: ['Placing', 'Moving', 'Mills', 'Winning'],
+  },
 ];
 
 for (const { name, sections } of GAMES) {

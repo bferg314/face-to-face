@@ -14,6 +14,8 @@ export interface Settings {
   dotsBoxesSize: DotsBoxesSize;
   /** Dots & Boxes player count. Applies from the next game. */
   dotsBoxesPlayers: DotsBoxesPlayers;
+  /** Nine Men's Morris: three men left may move to any empty point. */
+  morrisFlying: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -24,6 +26,7 @@ export const defaultSettings: Settings = {
   showHints: true,
   dotsBoxesSize: 6,
   dotsBoxesPlayers: 2,
+  morrisFlying: true,
 };
 
 const STORAGE_KEY = 'face-to-face-settings';
