@@ -484,20 +484,28 @@ button {
   background: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
+/* Like the move dots, the rings belong to the player to move and wear that
+   player's colour. */
 .sq.movable {
   cursor: pointer;
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--turn-c, var(--accent)) 55%, transparent);
 }
 
 .sq.sel {
   cursor: pointer;
-  box-shadow: inset 0 0 0 3px var(--accent);
+  box-shadow:
+    inset 0 0 0 3px var(--turn-c, var(--accent)),
+    inset 0 0 0 4.5px color-mix(in srgb, var(--turn-e, var(--accent)) 55%, transparent);
 }
 
 .sq.dest {
   cursor: pointer;
 }
 
+/* The dot wears the colour of the player to move, so each side reads its own
+   moves in its own colour. The inset --turn-e ring keeps light player colours
+   (tournament's ivory) visible on the light squares — same trick as the
+   checkers piece edge. */
 .sq.dest::after {
   content: '';
   position: absolute;
@@ -506,8 +514,10 @@ button {
   width: 32%;
   height: 32%;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) 80%, transparent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+  background: color-mix(in srgb, var(--turn-c, var(--accent)) 85%, transparent);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--turn-e, var(--accent)) 60%, transparent),
+    0 0 8px color-mix(in srgb, var(--turn-c, var(--accent)) 55%, transparent);
 }
 
 .sq.dest.cap::after {

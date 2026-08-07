@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 import {
   applyMove,
   colOf,
@@ -16,6 +17,13 @@ import { PlayerPanel } from '../../components/PlayerPanel';
 import { useGameHistory } from '../../hooks/useGameHistory';
 import { checkersHelp } from './help';
 import type { Settings } from '../../settings';
+
+/** Move dots belong to whoever is moving, so they carry that player's colour. */
+const turnVars = (player: PlayerId) =>
+  ({
+    '--turn-c': `var(--p${player})`,
+    '--turn-e': `var(--p${player}-edge)`,
+  }) as CSSProperties;
 
 export function CheckersGame({
   settings,
@@ -109,7 +117,9 @@ export function CheckersGame({
     >
       <div className="board-frame">
         <div className="board-inner">
-          <div className="board">{squares}</div>
+          <div className="board" style={turnVars(state.turn)}>
+            {squares}
+          </div>
           <div className="pieces">
             {state.board.map(
               (cell, i) =>
