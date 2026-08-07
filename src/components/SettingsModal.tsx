@@ -3,6 +3,7 @@ import type {
   DotsBoxesPlayers,
   DotsBoxesSize,
   PieceStyle,
+  QuoridorPlayers,
   Settings,
   ThemeId,
   ViewMode,
@@ -36,6 +37,11 @@ const DB_PLAYERS: Array<{ id: DotsBoxesPlayers; label: string }> = [
   { id: 2, label: '2' },
   { id: 3, label: '3' },
   { id: 4, label: '4' },
+];
+
+const QD_PLAYERS: Array<{ id: QuoridorPlayers; label: string; hint: string }> = [
+  { id: 2, label: '2', hint: 'Ten walls each' },
+  { id: 4, label: '4', hint: 'Five walls each' },
 ];
 
 const p1Vars = { '--pc': 'var(--p1)', '--pe': 'var(--p1-edge)' } as CSSProperties;
@@ -175,6 +181,26 @@ export function SettingsModal({
                 <span className="knob" />
               </span>
             </label>
+          </div>
+        </Section>
+
+        <Section title="Quoridor" game>
+          <div className="setting-group">
+            <span className="group-title">Players</span>
+            <div className="opt-row">
+              {QD_PLAYERS.map((p) => (
+                <button
+                  key={p.id}
+                  className={`opt ${settings.quoridorPlayers === p.id ? 'selected' : ''}`}
+                  onClick={() => set('quoridorPlayers', p.id)}
+                >
+                  <span>
+                    {p.label}
+                    <small>{p.hint}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </Section>
 

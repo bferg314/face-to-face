@@ -15,6 +15,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 import { ChessGame } from './chess/ChessGame';
 import { chessHelp } from './chess/help';
 import { ChessPiece } from './chess/pieces';
+import { QuoridorGame } from './quoridor/QuoridorGame';
+import { quoridorHelp } from './quoridor/help';
+import { QuoridorThumb } from './quoridor/board';
 import { MorrisGame } from './morris/MorrisGame';
 import { morrisHelp } from './morris/help';
 import { MorrisThumb } from './morris/board';
@@ -140,6 +143,14 @@ export const GAMES = [
     help: morrisHelp,
     Component: MorrisGame,
   },
+  {
+    id: 'quoridor',
+    title: 'Quoridor',
+    meta: '2 or 4 players',
+    thumb: <QuoridorThumb />,
+    help: quoridorHelp,
+    Component: QuoridorGame,
+  },
 ] as const satisfies readonly GameEntry[];
 
 export type GameId = (typeof GAMES)[number]['id'];
@@ -165,7 +176,6 @@ export interface ComingSoonEntry {
 export const COMING_SOON: ComingSoonEntry[] = [
   // Glyphs are kept to shapes with wide font coverage: the chess and shrine
   // characters these reached for first came out as tofu on a bare system.
-  { id: 'quoridor', title: 'Quoridor', meta: '2 or 4 players', glyph: '●‖●' },
   {
     id: 'chinese-checkers',
     title: 'Chinese Checkers',

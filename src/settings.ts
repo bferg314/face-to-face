@@ -3,6 +3,7 @@ export type PieceStyle = 'classic' | 'flat' | 'glass';
 export type ViewMode = 'across' | 'side-by-side';
 export type DotsBoxesSize = 4 | 6 | 8;
 export type DotsBoxesPlayers = 2 | 3 | 4;
+export type QuoridorPlayers = 2 | 4;
 
 export interface Settings {
   theme: ThemeId;
@@ -16,6 +17,8 @@ export interface Settings {
   dotsBoxesPlayers: DotsBoxesPlayers;
   /** Nine Men's Morris: three men left may move to any empty point. */
   morrisFlying: boolean;
+  /** Quoridor player count. Applies from the next game. */
+  quoridorPlayers: QuoridorPlayers;
 }
 
 export const defaultSettings: Settings = {
@@ -27,6 +30,7 @@ export const defaultSettings: Settings = {
   dotsBoxesSize: 6,
   dotsBoxesPlayers: 2,
   morrisFlying: true,
+  quoridorPlayers: 2,
 };
 
 const STORAGE_KEY = 'face-to-face-settings';

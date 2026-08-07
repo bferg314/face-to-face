@@ -17,6 +17,10 @@ const GAMES = [
     sections: ['Moving', 'Special moves', 'Check & checkmate', 'Winning'],
   },
   {
+    name: 'Quoridor',
+    sections: ['Your turn', 'Walls', 'Winning'],
+  },
+  {
     name: 'Nine Men’s Morris',
     sections: ['Placing', 'Moving', 'Mills', 'Winning'],
   },
