@@ -17,6 +17,10 @@ const GAMES = [
     sections: ['Moving', 'Special moves', 'Check & checkmate', 'Winning'],
   },
   {
+    name: 'Chinese Checkers',
+    sections: ['Moving', 'Jumping', 'The star', 'Winning'],
+  },
+  {
     name: 'Quoridor',
     sections: ['Your turn', 'Walls', 'Winning'],
   },
@@ -33,7 +37,12 @@ for (const { name, sections } of GAMES) {
     page.on('pageerror', (e) => errors.push(String(e)));
 
     await page.goto('/');
-    await page.getByRole('button', { name: new RegExp(name, 'i') }).click();
+    // By the card's own heading, not the whole card's text: "Checkers" is a
+    // substring of "Chinese Checkers", and a loose match hits both cards.
+    await page
+      .locator('.game-card.playable')
+      .filter({ has: page.getByRole('heading', { name, exact: true }) })
+      .click();
 
     await page.getByRole('button', { name: 'How to play' }).click();
     const modal = page.locator('.help-modal');

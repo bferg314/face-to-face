@@ -67,6 +67,8 @@ button {
   --mm-line: #8a5a33;
   --qd-bg: #7a4e2c;
   --qd-cell: #e9d3a5;
+  --cc-bg: #e9d3a5;
+  --cc-hole: #b98d5c;
 }
 
 [data-theme='tournament'] {
@@ -103,6 +105,8 @@ button {
   --mm-line: #34715a;
   --qd-bg: #2b4a3c;
   --qd-cell: #efe6c9;
+  --cc-bg: #efe6c9;
+  --cc-hole: #9fb3a3;
 }
 
 [data-theme='midnight'] {
@@ -139,6 +143,8 @@ button {
   --mm-line: #46578f;
   --qd-bg: #10162c;
   --qd-cell: #26304f;
+  --cc-bg: #1c2440;
+  --cc-hole: #3a4877;
 }
 
 [data-theme='porcelain'] {
@@ -175,6 +181,8 @@ button {
   --mm-line: #8b98a4;
   --qd-bg: #b3ab95;
   --qd-cell: #faf6ea;
+  --cc-bg: #faf6ea;
+  --cc-hole: #c9c2b0;
 }
 
 /* Midnight pieces get a soft neon glow. */
@@ -1203,6 +1211,114 @@ button {
 
 .db-thumb-2 {
   --pc: var(--p2);
+}
+
+/* ------------------------------------------------------- chinese checkers */
+
+/* No `.across` rules: the star is symmetrical and carries no text, and each
+   player's own point is tinted their colour from wherever they sit. */
+
+.cc-board {
+  position: absolute;
+  inset: 0;
+  background: var(--cc-bg);
+}
+
+/* The holes are placed inside this rather than against the board itself, so
+   the tips of the six points — and the marbles standing in them, which sit
+   proud of their hole — keep clear of the frame instead of being cropped by
+   it. Percentages in `POS` and `--cc-step` measure against this box. */
+.cc-star {
+  position: absolute;
+  inset: 5%;
+}
+
+/* Holes are placed from the engine's `POS`, which is why nothing here knows
+   about rows or columns. `--cc-step` is the gap between touching holes, so
+   the marbles scale with the board and never crowd their neighbours. */
+.cc-hole {
+  position: absolute;
+  width: calc(var(--cc-step) * 0.86);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cc-hole) 55%, transparent);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* Where a player started, and the point they are running at. */
+.cc-hole.cc-home {
+  background: color-mix(in srgb, var(--home-c) 30%, var(--cc-hole));
+}
+
+.cc-hole.cc-target {
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.25),
+    0 0 0 2px color-mix(in srgb, var(--target-c) 75%, transparent);
+}
+
+/* Marbles and rings sit a little proud of their hole, so they must not take
+   the taps: without this a marble can cover the middle of the hole next door
+   and swallow the tap meant for it. */
+.cc-marble {
+  position: absolute;
+  inset: -6%;
+  pointer-events: none;
+}
+
+.cc-marble .checker {
+  inset: 0;
+}
+
+.cc-hole.movable,
+.cc-hole.sel,
+.cc-hole.dest {
+  cursor: pointer;
+}
+
+/* Marbles worth picking up, and the one in your hand. */
+.cc-hole.movable::after,
+.cc-hole.sel::after {
+  content: '';
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cc-hole.movable::after {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--turn-c) 55%, transparent);
+}
+
+.cc-hole.sel::after {
+  box-shadow:
+    0 0 0 3px var(--turn-c),
+    0 0 0 4.5px color-mix(in srgb, var(--turn-e) 55%, transparent);
+}
+
+/* Everywhere the marble in hand can reach, chains included. */
+.cc-hole.dest::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  inset: 24%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--turn-c) 85%, transparent);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--turn-e) 60%, transparent),
+    0 0 8px color-mix(in srgb, var(--turn-c) 55%, transparent);
+}
+
+.cc-hole.last {
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 2px;
+}
+
+/* Lobby thumbnail: the star, with a marble in two facing points. */
+.cc-thumb {
+  width: 76px;
+  height: 76px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
 }
 
 /* --------------------------------------------------------------- quoridor */
