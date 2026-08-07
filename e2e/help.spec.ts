@@ -17,6 +17,10 @@ const GAMES = [
     sections: ['Moving', 'Special moves', 'Check & checkmate', 'Winning'],
   },
   {
+    name: 'Yacht Dice',
+    sections: ['Your turn', 'The boxes', 'Winning'],
+  },
+  {
     name: 'Onitama',
     sections: ['The cards', 'Your turn', 'Winning'],
   },

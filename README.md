@@ -4,8 +4,8 @@ A web-based collection of table games for 2–4 people sharing one screen —
 designed for a tablet or laptop lying flat on the table between players.
 
 **Games:** Checkers, Reversi, Mancala, Ultimate Tic-Tac-Toe, Dots & Boxes,
-Chess, Nine Men's Morris, Quoridor, Chinese Checkers, Connect Four, and
-Onitama (playable now) · Yacht Dice (planned)
+Chess, Nine Men's Morris, Quoridor, Chinese Checkers, Connect Four, Onitama,
+and Yacht Dice — all twelve playable.
 
 ## Features
 
@@ -48,6 +48,10 @@ Onitama (playable now) · Yacht Dice (planned)
   spare, and the card you play is handed to your opponent two turns later.
   Win by taking the enemy Master or walking your own into their arch. Every
   card is face up, and each hand is drawn from its owner's side of the board.
+- **Yacht Dice** for 2–4 players — five dice, three rolls a turn, twelve boxes
+  to fill, played by the original 1938 rules. The dice come from a seeded
+  function of the turn and the die's place in the tray, so undo takes back a
+  decision without ever fishing for better numbers.
 - **Seating that faces the players.** Every panel is turned to read right way
   up from its own chair:
   - *2 players* choose between **across the table** (the far panel rotated
@@ -96,9 +100,9 @@ docker compose -f docker-compose.build.yml up --build -d
 
 ## Releases
 
-Versions are `0.<games>`: **0.5** was the seven games playable at the time,
-each new game adds `.1`, and the collection reaches **1.0** when everything on
-the planned list is in.
+Versions were `0.<games>`: **0.5** was the seven games playable at the time,
+and each new game added `.1` until the planned list was done. **1.0.0** is
+that full set — twelve games. Anything after it is ordinary semver.
 
 Pushing a `v*` tag runs `.github/workflows/release.yml`, which runs the engine
 tests and then builds and pushes the image:
