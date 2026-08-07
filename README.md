@@ -68,13 +68,7 @@ docker compose up -d
 TAG=0.5.0 docker compose up -d
 ```
 
-While the repository is private the package is too, so pull once with a
-[personal access token](https://github.com/settings/tokens) that has
-`read:packages`:
-
-```sh
-echo $GITHUB_TOKEN | docker login ghcr.io -u bferg314 --password-stdin
-```
+The package is public, so none of this needs a login.
 
 To build from a checkout instead of pulling — which is what you want when
 working on the app:
