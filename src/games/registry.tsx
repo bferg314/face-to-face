@@ -15,6 +15,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 import { ChessGame } from './chess/ChessGame';
 import { chessHelp } from './chess/help';
 import { ChessPiece } from './chess/pieces';
+import { C4Game } from './connectfour/C4Game';
+import { c4Help } from './connectfour/help';
+import { C4Thumb } from './connectfour/board';
 import { CcGame } from './chinesecheckers/CcGame';
 import { ccHelp } from './chinesecheckers/help';
 import { CcThumb } from './chinesecheckers/board';
@@ -162,6 +165,14 @@ export const GAMES = [
     help: ccHelp,
     Component: CcGame,
   },
+  {
+    id: 'connect-four',
+    title: 'Connect Four',
+    meta: '2 players',
+    thumb: <C4Thumb />,
+    help: c4Help,
+    Component: C4Game,
+  },
 ] as const satisfies readonly GameEntry[];
 
 export type GameId = (typeof GAMES)[number]['id'];
@@ -188,6 +199,5 @@ export const COMING_SOON: ComingSoonEntry[] = [
   // Glyphs are kept to shapes with wide font coverage: the chess and shrine
   // characters these reached for first came out as tofu on a bare system.
   { id: 'onitama', title: 'Onitama', meta: '2 players', glyph: '❖', glyphClass: 'big' },
-  { id: 'connect-four', title: 'Connect Four', meta: '2 players', glyph: '●○' },
   { id: 'yacht', title: 'Yacht Dice', meta: '2–4 players', glyph: '⚄⚁' },
 ];
