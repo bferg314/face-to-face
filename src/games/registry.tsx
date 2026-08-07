@@ -15,6 +15,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 import { ChessGame } from './chess/ChessGame';
 import { chessHelp } from './chess/help';
 import { ChessPiece } from './chess/pieces';
+import { YachtGame } from './yacht/YachtGame';
+import { yachtHelp } from './yacht/help';
+import { YachtThumb } from './yacht/board';
 import { OnitamaGame } from './onitama/OnitamaGame';
 import { onitamaHelp } from './onitama/help';
 import { OnitamaThumb } from './onitama/board';
@@ -184,6 +187,14 @@ export const GAMES = [
     help: onitamaHelp,
     Component: OnitamaGame,
   },
+  {
+    id: 'yacht',
+    title: 'Yacht Dice',
+    meta: '2–4 players',
+    thumb: <YachtThumb />,
+    help: yachtHelp,
+    Component: YachtGame,
+  },
 ] as const satisfies readonly GameEntry[];
 
 export type GameId = (typeof GAMES)[number]['id'];
@@ -205,9 +216,9 @@ export interface ComingSoonEntry {
  *
  * Player counts are capped at four: GameShell seats four chairs and the themes
  * carry four player colours.
+ *
+ * Empty as of 1.0 — everything planned is playable. Anything added here wants
+ * a glyph with wide font coverage: the chess and shrine characters an earlier
+ * list reached for came out as tofu on a bare system.
  */
-export const COMING_SOON: ComingSoonEntry[] = [
-  // Glyphs are kept to shapes with wide font coverage: the chess and shrine
-  // characters these reached for first came out as tofu on a bare system.
-  { id: 'yacht', title: 'Yacht Dice', meta: '2–4 players', glyph: '⚄⚁' },
-];
+export const COMING_SOON: ComingSoonEntry[] = [];

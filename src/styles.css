@@ -76,6 +76,10 @@ button {
   --on-card: #3a2c1e;
   --on-card-bg: #55442f;
   --on-pip: #e8a94b;
+  --yd-felt: #4a3a28;
+  --yd-die: #f3e6cd;
+  --yd-pip: #33271c;
+  --yd-rule: #6b543a;
 }
 
 [data-theme='tournament'] {
@@ -121,6 +125,10 @@ button {
   --on-card: #1a3026;
   --on-card-bg: #2f4c3d;
   --on-pip: #ffd75e;
+  --yd-felt: #244134;
+  --yd-die: #f4efdc;
+  --yd-pip: #1e3527;
+  --yd-rule: #3d6752;
 }
 
 [data-theme='midnight'] {
@@ -166,6 +174,10 @@ button {
   --on-card: #131a30;
   --on-card-bg: #242e52;
   --on-pip: #58e0ff;
+  --yd-felt: #151d38;
+  --yd-die: #dce6ff;
+  --yd-pip: #131a30;
+  --yd-rule: #2b3760;
 }
 
 [data-theme='porcelain'] {
@@ -211,6 +223,10 @@ button {
   --on-card: #ddd5c2;
   --on-card-bg: #f2eee3;
   --on-pip: #c07a3e;
+  --yd-felt: #cfc7b4;
+  --yd-die: #fffdf7;
+  --yd-pip: #4a443a;
+  --yd-rule: #b3ab95;
 }
 
 /* Midnight pieces get a soft neon glow. */
@@ -1239,6 +1255,329 @@ button {
 
 .db-thumb-2 {
   --pc: var(--p2);
+}
+
+/* ------------------------------------------------------------- yacht dice */
+
+/* A scorecard is a table of numbers — the most orientation-bound thing in the
+   collection — so unlike every other board here, this one turns: the whole
+   felt swings round to face the chair straight across when it is that
+   player's turn. A Yacht turn is long enough to afford it. The dice
+   themselves are orientation-free; pips read the same from anywhere. */
+
+.yd-table {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 1.4cqh, 14px);
+  width: min(100cqw, 560px);
+  /* Hugs the tray and the card rather than stretching past them, so the felt
+     ends where the scorecard does. */
+  height: auto;
+  max-height: 100%;
+  padding: clamp(6px, 1.4cqh, 14px);
+  border-radius: 14px;
+  background: var(--yd-felt);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+  transition:
+    rotate 0.45s ease,
+    width 0.45s ease;
+}
+
+/* Turned to face whoever is deciding. Slow on purpose: a turn here lasts long
+   enough that the card should look handed over, not flicked. The quarter
+   turns match the angles GameShell already gives the side panels, so the felt
+   and that player's own panel end up the same way up. */
+.yd-table.turn-top {
+  rotate: 180deg;
+}
+
+.yd-table.turn-left {
+  rotate: 90deg;
+}
+
+.yd-table.turn-right {
+  rotate: -90deg;
+}
+
+/* On its side, the felt's width becomes its height on screen — so it is sized
+   against the board area's height instead, and capped the other way about. */
+.yd-table.turn-left,
+.yd-table.turn-right {
+  width: min(100cqh, 560px);
+  max-height: 100cqw;
+}
+
+.yd-tray {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2cqw, 20px);
+  width: 100%;
+}
+
+.yd-dice {
+  --yd-size: 52px;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1.2cqw, 10px);
+  min-width: 0;
+}
+
+.yd-prompt {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.yd-die {
+  flex: 0 0 auto;
+  width: var(--yd-size);
+  height: var(--yd-size);
+  /* Off its own size, not a percentage: percentage padding resolves against
+     the parent's width, which on a wide tray inflates the die instead of
+     insetting the pips. */
+  padding: calc(var(--yd-size) * 0.14);
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: calc(var(--yd-size) * 0.05);
+  border: none;
+  border-radius: calc(var(--yd-size) * 0.18);
+  background: var(--yd-die);
+  box-shadow:
+    0 3px 0 color-mix(in srgb, var(--yd-pip) 35%, transparent),
+    0 5px 10px rgba(0, 0, 0, 0.35);
+  cursor: default;
+  animation: yd-tumble 0.28s ease-out;
+}
+
+/* Keyed on the roll it landed, so only dice that actually moved tumble. */
+.yd-die.held {
+  animation: none;
+  translate: 0 -8%;
+  box-shadow:
+    0 3px 0 color-mix(in srgb, var(--yd-pip) 35%, transparent),
+    0 8px 14px rgba(0, 0, 0, 0.4),
+    0 0 0 2.5px var(--accent);
+}
+
+.yd-die.pickable {
+  cursor: pointer;
+}
+
+@keyframes yd-tumble {
+  from {
+    transform: rotate(-24deg) scale(0.7);
+    opacity: 0.4;
+  }
+}
+
+.yd-pip {
+  border-radius: 50%;
+  background: transparent;
+}
+
+.yd-pip.on {
+  background: var(--yd-pip);
+}
+
+.yd-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.yd-roll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 11px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.yd-roll small {
+  font-size: 0.62rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.yd-roll:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.yd-round {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------ scorecard */
+
+.yd-card {
+  flex: 0 1 auto;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--panel) 75%, transparent);
+}
+
+.yd-row {
+  display: grid;
+  /* One column for the name, then one per player, set inline nowhere: the
+     players column count comes from `auto-fit` over what is rendered. */
+  grid-template-columns: minmax(0, 1fr) repeat(auto-fit, minmax(38px, 52px));
+  align-items: stretch;
+  border-bottom: 1px solid var(--yd-rule);
+}
+
+.yd-row:last-child {
+  border-bottom: none;
+}
+
+/* The two halves of the card, as on the paper one. */
+.yd-row.yd-lower:first-of-type {
+  border-top: 2px solid var(--yd-rule);
+}
+
+.yd-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3px 10px;
+  font-size: clamp(0.66rem, 1.6cqh, 0.82rem);
+  font-weight: 600;
+  color: var(--text);
+  min-width: 0;
+}
+
+.yd-name small {
+  font-size: 0.62em;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yd-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--yd-rule);
+  font-size: clamp(0.7rem, 1.8cqh, 0.9rem);
+  font-variant-numeric: tabular-nums;
+  background: none;
+  color: var(--text);
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.yd-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel);
+}
+
+.yd-who {
+  gap: 5px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 5px 0;
+}
+
+.yd-who.active {
+  color: var(--text);
+}
+
+.yd-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--pc);
+}
+
+/* A box still to be filled. For the player to move it shows what the dice on
+   the table would put in it — arithmetic, not advice, so it is never gated. */
+.yd-open {
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.yd-open:disabled {
+  cursor: default;
+  color: transparent;
+}
+
+.yd-open:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.yd-open:not(:disabled):hover {
+  background: color-mix(in srgb, var(--accent) 26%, transparent);
+  color: var(--text);
+}
+
+/* The best box on the table, when hints are on. */
+.yd-open.best {
+  color: var(--accent);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.yd-written {
+  font-weight: 600;
+}
+
+.yd-written.just {
+  animation: yd-ink 0.9s ease-out;
+}
+
+@keyframes yd-ink {
+  from {
+    background: color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+}
+
+.yd-total {
+  border-top: 2px solid var(--yd-rule);
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+  position: sticky;
+  bottom: 0;
+}
+
+.yd-sum {
+  font-weight: 800;
+  font-size: clamp(0.8rem, 2cqh, 1rem);
+}
+
+@media (max-height: 620px), (max-width: 520px) {
+  .yd-dice {
+    --yd-size: 38px;
+  }
+}
+
+/* Lobby thumbnail: two dice on the felt. */
+.yd-thumb {
+  width: 76px;
+  height: 76px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
 }
 
 /* ---------------------------------------------------------------- onitama */

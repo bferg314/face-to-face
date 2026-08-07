@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type {
   CcPlayers,
+  YachtPlayers,
   DotsBoxesPlayers,
   DotsBoxesSize,
   PieceStyle,
@@ -49,6 +50,12 @@ const CC_PLAYERS: Array<{ id: CcPlayers; label: string; hint: string }> = [
   { id: 2, label: '2', hint: 'Facing points' },
   { id: 3, label: '3', hint: 'Every other point' },
   { id: 4, label: '4', hint: 'Two facing pairs' },
+];
+
+const YD_PLAYERS: Array<{ id: YachtPlayers; label: string }> = [
+  { id: 2, label: '2' },
+  { id: 3, label: '3' },
+  { id: 4, label: '4' },
 ];
 
 const p1Vars = { '--pc': 'var(--p1)', '--pe': 'var(--p1-edge)' } as CSSProperties;
@@ -188,6 +195,23 @@ export function SettingsModal({
                 <span className="knob" />
               </span>
             </label>
+          </div>
+        </Section>
+
+        <Section title="Yacht Dice" game>
+          <div className="setting-group">
+            <span className="group-title">Players</span>
+            <div className="opt-row">
+              {YD_PLAYERS.map((p) => (
+                <button
+                  key={p.id}
+                  className={`opt ${settings.yachtPlayers === p.id ? 'selected' : ''}`}
+                  onClick={() => set('yachtPlayers', p.id)}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
           </div>
         </Section>
 

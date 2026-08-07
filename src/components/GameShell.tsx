@@ -9,7 +9,7 @@ import { HelpModal, type GameHelp } from './HelpModal';
  * below the board and both upright. CSS rotates each ring seat so its text
  * reads right way up from that chair.
  */
-type SeatPos = 'bottom' | 'left' | 'top' | 'right' | 'sbs-1' | 'sbs-2';
+export type SeatPos = 'bottom' | 'left' | 'top' | 'right' | 'sbs-1' | 'sbs-2';
 
 /**
  * Seats for `count` players, in turn order. Three and four players always sit
@@ -19,7 +19,7 @@ type SeatPos = 'bottom' | 'left' | 'top' | 'right' | 'sbs-1' | 'sbs-2';
  * The ring runs bottom → left → top → right so consecutive players are
  * physically adjacent and play passes around the table rather than across it.
  */
-function seatPositions(count: number, viewMode: ViewMode): SeatPos[] {
+export function seatPositions(count: number, viewMode: ViewMode): SeatPos[] {
   if (count <= 2) {
     return viewMode === 'across' ? ['bottom', 'top'] : ['sbs-1', 'sbs-2'];
   }
@@ -27,6 +27,16 @@ function seatPositions(count: number, viewMode: ViewMode): SeatPos[] {
     ? ['bottom', 'left', 'top']
     : ['bottom', 'left', 'top', 'right'];
 }
+
+/**
+ * The chair one player sits in. Games that turn something towards the player
+ * whose turn it is need this: it is the only place that knows the seating.
+ */
+export const seatOf = (
+  player: number,
+  count: number,
+  viewMode: ViewMode,
+): SeatPos => seatPositions(count, viewMode)[player - 1];
 
 function layoutClass(count: number, viewMode: ViewMode): string {
   if (count <= 2) return viewMode === 'across' ? 'across' : 'sbs';
