@@ -19,6 +19,7 @@ export const yachtHelp: GameHelp = {
         'Ones through Sixes score every die showing that number — three fours is twelve.',
         'Full House is three alike and a pair, and pays the whole hand. Four of a Kind pays just the four that made it.',
         'Little Straight is 1-2-3-4-5 and Big Straight is 2-3-4-5-6, both worth thirty. Choice pays whatever is showing, and Yacht — all five alike — pays fifty.',
+        'The two straights are named for which run they take, not how long it is: every straight here is five in a row, and 1-2-3-4-5 only ever scores in the Little box. If you know the game with a four-in-a-row box, there isn’t one.',
         'Every box is used exactly once. If nothing fits, you must still write a nought somewhere, so spend the awkward boxes early.',
       ],
     },
