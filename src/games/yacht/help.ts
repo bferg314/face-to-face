@@ -33,6 +33,7 @@ export const yachtHelp: GameHelp = {
       heading: 'Winning',
       items: [
         'The game ends when every card is full. The highest total wins, and an exact tie is a draw.',
+        'Sitting across the table, the card turns to face whoever is deciding, so the numbers are never read upside down.',
         'With move hints on, the box worth the most right now is marked.',
       ],
     },

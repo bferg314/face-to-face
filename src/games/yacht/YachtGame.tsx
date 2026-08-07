@@ -17,7 +17,7 @@ import {
 } from './engine';
 import { Die } from './Die';
 import { ConfirmModal } from '../../components/ConfirmModal';
-import { GameShell } from '../../components/GameShell';
+import { GameShell, seatOf } from '../../components/GameShell';
 import { PlayerPanel } from '../../components/PlayerPanel';
 import { useGameHistory } from '../../hooks/useGameHistory';
 import { yachtHelp } from './help';
@@ -62,6 +62,17 @@ export function YachtGame({
   const table = useMemo(() => totals(state), [state]);
   const rolled = state.dice.length > 0;
 
+  // A scorecard is a table of numbers, which is the most orientation-bound
+  // thing in the collection, and a Yacht turn is long enough that turning it
+  // round costs nothing — the opposite of a game like Connect Four, where the
+  // board would spin every few seconds. So the felt turns to face whoever is
+  // deciding, or the winner once there is one, whenever that seat is the one
+  // straight across. Seats to the left and right are left alone: a quarter
+  // turn would have to shrink the card to fit, and someone sitting beside a
+  // score sheet reads it at an angle anyway.
+  const facing = typeof state.winner === 'number' ? state.winner : state.turn;
+  const turned = seatOf(facing, state.players, settings.viewMode) === 'top';
+
   return (
     <>
       <GameShell
@@ -77,7 +88,7 @@ export function YachtGame({
           <YachtPanel key={p} player={p} state={state} total={table[p]} />
         ))}
       >
-        <div className="yd-table">
+        <div className={`yd-table${turned ? ' turned' : ''}`}>
           <div className="yd-tray">
             <div className="yd-dice">
               {rolled ? (

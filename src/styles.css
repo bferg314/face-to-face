@@ -1259,10 +1259,11 @@ button {
 
 /* ------------------------------------------------------------- yacht dice */
 
-/* No `.across` rules, and this one cannot have them: a scorecard is a table
-   of numbers, and a table cannot face two chairs at once. It reads best side
-   by side, which the help says. The dice themselves are orientation-free —
-   pips look the same from anywhere. */
+/* A scorecard is a table of numbers — the most orientation-bound thing in the
+   collection — so unlike every other board here, this one turns: the whole
+   felt swings round to face the chair straight across when it is that
+   player's turn. A Yacht turn is long enough to afford it. The dice
+   themselves are orientation-free; pips read the same from anywhere. */
 
 .yd-table {
   position: relative;
@@ -1282,6 +1283,13 @@ button {
     0 12px 32px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.09);
   overflow: hidden;
+  transition: rotate 0.45s ease;
+}
+
+/* Turned to face the chair straight across. Slow on purpose: a turn here
+   lasts long enough that the card should look handed over, not flicked. */
+.yd-table.turned {
+  rotate: 180deg;
 }
 
 .yd-tray {
