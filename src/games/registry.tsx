@@ -15,6 +15,9 @@ import { dotsBoxesHelp } from './dotsboxes/help';
 import { ChessGame } from './chess/ChessGame';
 import { chessHelp } from './chess/help';
 import { ChessPiece } from './chess/pieces';
+import { MorrisGame } from './morris/MorrisGame';
+import { morrisHelp } from './morris/help';
+import { MorrisThumb } from './morris/board';
 
 /**
  * The single list of games. Adding a game means adding one entry to `GAMES`
@@ -129,6 +132,14 @@ export const GAMES = [
     help: chessHelp,
     Component: ChessGame,
   },
+  {
+    id: 'morris',
+    title: 'Nine Men’s Morris',
+    meta: '2 players',
+    thumb: <MorrisThumb />,
+    help: morrisHelp,
+    Component: MorrisGame,
+  },
 ] as const satisfies readonly GameEntry[];
 
 export type GameId = (typeof GAMES)[number]['id'];
@@ -142,7 +153,6 @@ export interface ComingSoonEntry {
 }
 
 export const COMING_SOON: ComingSoonEntry[] = [
-  { id: 'morris', title: 'Nine Men’s Morris', meta: '2 players', glyph: '▣' },
   { id: 'yacht', title: 'Yacht Dice', meta: '2–4 players', glyph: '⚄⚁' },
   { id: 'boggle', title: 'Boggle', meta: '2–4 players', glyph: 'B', glyphClass: 'tile' },
 ];

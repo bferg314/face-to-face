@@ -178,6 +178,27 @@ export function SettingsModal({
           </div>
         </Section>
 
+        <Section title="Nine Men’s Morris" game>
+          <div className="setting-group">
+            <label className="switch-row">
+              <span>
+                Flying
+                <span className="desc">
+                  Down to three men, move anywhere on the board
+                </span>
+              </span>
+              <span className="switch">
+                <input
+                  type="checkbox"
+                  checked={settings.morrisFlying}
+                  onChange={(e) => set('morrisFlying', e.target.checked)}
+                />
+                <span className="knob" />
+              </span>
+            </label>
+          </div>
+        </Section>
+
         <Section title="Dots & Boxes" game>
           <div className="setting-group">
             <span className="group-title">Players</span>

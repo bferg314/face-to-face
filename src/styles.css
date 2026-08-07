@@ -63,6 +63,8 @@ button {
   --db-bg: #e9d3a5;
   --db-dot: #4a3722;
   --db-ghost: #c8ab7a;
+  --mm-bg: #e9d3a5;
+  --mm-line: #8a5a33;
 }
 
 [data-theme='tournament'] {
@@ -95,6 +97,8 @@ button {
   --db-bg: #efe6c9;
   --db-dot: #2a4638;
   --db-ghost: #cdbf9b;
+  --mm-bg: #efe6c9;
+  --mm-line: #34715a;
 }
 
 [data-theme='midnight'] {
@@ -127,6 +131,8 @@ button {
   --db-bg: #1c2440;
   --db-dot: #8b96b8;
   --db-ghost: #2b3760;
+  --mm-bg: #1c2440;
+  --mm-line: #46578f;
 }
 
 [data-theme='porcelain'] {
@@ -159,6 +165,8 @@ button {
   --db-bg: #faf6ea;
   --db-dot: #57606b;
   --db-ghost: #d8d0bd;
+  --mm-bg: #faf6ea;
+  --mm-line: #8b98a4;
 }
 
 /* Midnight pieces get a soft neon glow. */
@@ -1169,6 +1177,154 @@ button {
 
 .db-thumb-2 {
   --pc: var(--p2);
+}
+
+/* ------------------------------------------------- nine men's morris */
+
+/* No `.across` rules here, like the other line-and-token games: the board is
+   symmetrical and carries no text, so it reads the same from either chair. */
+
+.mm-board {
+  position: absolute;
+  inset: 0;
+  padding: 7%;
+  background: var(--mm-bg);
+}
+
+/* The square the lattice is drawn in. The SVG and the points share it, so a
+   point's percentage position lands exactly on its end of a line. */
+.mm-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mm-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  stroke: var(--mm-line);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mm-point {
+  position: absolute;
+  width: 13.5%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+/* Vacant points are drawn small — a rule display, not a hint: without them
+   there is no telling where a line ends and a man may go. */
+.mm-point.empty::before {
+  content: '';
+  position: absolute;
+  inset: 37%;
+  border-radius: 50%;
+  background: var(--mm-line);
+}
+
+.mm-point.open,
+.mm-point.dest,
+.mm-point.sel,
+.mm-point.movable,
+.mm-point.takeable {
+  cursor: pointer;
+}
+
+/* A point you may place on or slide to, in the colour of the player to move. */
+.mm-point.open:hover::before,
+.mm-point.dest::before {
+  inset: 24%;
+  background: color-mix(in srgb, var(--turn-c) 85%, transparent);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--turn-e) 60%, transparent),
+    0 0 8px color-mix(in srgb, var(--turn-c) 55%, transparent);
+}
+
+.mm-man {
+  position: absolute;
+  inset: 0;
+}
+
+/* Rings sit outside the man so they never crop it. */
+.mm-point.movable::after,
+.mm-point.sel::after,
+.mm-point.takeable::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.mm-point.movable::after {
+  inset: -5%;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--turn-c) 55%, transparent);
+}
+
+.mm-point.sel::after {
+  inset: -8%;
+  box-shadow:
+    0 0 0 3px var(--turn-c),
+    0 0 0 4.5px color-mix(in srgb, var(--turn-e) 55%, transparent);
+}
+
+/* The men a mill lets you take. Red, like a capture everywhere else, and
+   shown whether or not hints are on — the phase is unreadable without it. */
+.mm-point.takeable::after {
+  inset: -8%;
+  box-shadow:
+    0 0 0 3px #e05252,
+    0 0 10px rgba(224, 82, 82, 0.55);
+}
+
+/* The mill just closed. */
+.mm-point.milled::before {
+  content: '';
+  position: absolute;
+  inset: -16%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.mm-point.last {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.mm-point.taken::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid #e05252;
+  animation: mm-taken 0.55s ease-out forwards;
+}
+
+@keyframes mm-taken {
+  from {
+    opacity: 0.9;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* Nine men in hand, so they crowd tighter than the checkers tray. */
+.mm-tray .mini {
+  margin-left: -7px;
+}
+
+/* Lobby thumbnail: the board itself, with a man of each colour on it. */
+.mm-thumb {
+  width: 74px;
+  height: 74px;
+  stroke: var(--mm-line);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
 }
 
 /* ------------------------------------------------------------------ chess */
