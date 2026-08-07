@@ -1466,7 +1466,9 @@ button {
 }
 
 .yd-name small {
-  font-size: 0.62em;
+  /* Big enough to read across a table: it is the line that says which run a
+     straight wants, and getting that wrong costs a box. */
+  font-size: 0.76em;
   font-weight: 500;
   color: var(--muted);
   white-space: nowrap;
