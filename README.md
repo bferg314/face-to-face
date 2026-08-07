@@ -4,7 +4,8 @@ A web-based collection of table games for 2–4 people sharing one screen —
 designed for a tablet or laptop lying flat on the table between players.
 
 **Games:** Checkers, Reversi, Mancala, Ultimate Tic-Tac-Toe, Dots & Boxes,
-Chess, and Nine Men's Morris (playable now) · Yacht Dice and Boggle (planned)
+Chess, and Nine Men's Morris (playable now) · Quoridor, Chinese Checkers,
+Onitama, Connect Four, and Yacht Dice (planned)
 
 ## Features
 
