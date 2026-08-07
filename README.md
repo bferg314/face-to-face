@@ -53,17 +53,50 @@ npm run test:e2e # browser tests (Playwright)
 
 ## Docker
 
+Every released version is published to the GitHub Container Registry as
+`ghcr.io/bferg314/face-to-face`, for `linux/amd64` and `linux/arm64`. The
+compose file in this repo runs it:
+
 ```sh
-docker compose up --build -d
+docker compose up -d
 # open http://localhost:8080
 ```
 
-Or without compose:
+`latest` follows the newest release. Pin a version with `TAG`:
 
 ```sh
-docker build -t face-to-face .
-docker run -d -p 8080:80 face-to-face
+TAG=0.5.0 docker compose up -d
 ```
+
+While the repository is private the package is too, so pull once with a
+[personal access token](https://github.com/settings/tokens) that has
+`read:packages`:
+
+```sh
+echo $GITHUB_TOKEN | docker login ghcr.io -u bferg314 --password-stdin
+```
+
+To build from a checkout instead of pulling — which is what you want when
+working on the app:
+
+```sh
+docker compose -f docker-compose.build.yml up --build -d
+```
+
+## Releases
+
+Versions are `0.<games>`: **0.5** is the seven games that are playable today,
+each new game adds `.1`, and the collection reaches **1.0** when everything on
+the planned list is in.
+
+Pushing a `v*` tag runs `.github/workflows/release.yml`, which runs the engine
+tests and then builds and pushes the image:
+
+```sh
+git tag v0.6.0 && git push origin v0.6.0
+```
+
+That publishes `0.6.0`, `0.6`, `v0.6.0` and `latest`.
 
 ## Project layout
 

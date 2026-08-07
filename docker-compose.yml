@@ -1,6 +1,8 @@
+# Runs the published image. Set TAG to pin a version, e.g. TAG=0.5.0.
+# To build from this checkout instead, use docker-compose.build.yml.
 services:
   face-to-face:
-    build: .
+    image: ghcr.io/bferg314/face-to-face:${TAG:-latest}
     ports:
       - '8080:80'
     restart: unless-stopped
