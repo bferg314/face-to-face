@@ -1,0 +1,8 @@
+# Builds the image from this checkout, for working on the app itself.
+# The published image is what docker-compose.yml runs.
+services:
+  face-to-face:
+    build: .
+    ports:
+      - '8080:80'
+    restart: unless-stopped
