@@ -3,6 +3,7 @@ dist/
 *.local
 test-results/
 playwright-report/
+.wrangler/
 
 # Per-machine Claude Code permissions. Not covered by *.local above, which
 # only matches names ending in .local.
