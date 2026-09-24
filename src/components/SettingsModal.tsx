@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
+import { IconClose } from './icons';
 import type {
   CcPlayers,
   YachtPlayers,
@@ -64,10 +65,6 @@ const p1Vars = { '--pc': 'var(--p1)', '--pe': 'var(--p1-edge)' } as CSSPropertie
  * A band of settings under one heading. Anything that changes a single game is
  * fenced off under that game's name (`game`), so it reads at a glance which
  * controls reach the whole app and which only touch the board you're on.
- *
- * Game names are spelled out here rather than pulled from the registry: adding
- * a game-specific setting always means editing this file anyway, and the
- * registry entry carries no settings of its own to read.
  */
 function Section({
   title,
@@ -95,6 +92,7 @@ export function SettingsModal({
   onChange: (s: Settings) => void;
   onClose: () => void;
 }) {
+  const [activeTab, setActiveTab] = useState<'style' | 'rules'>('style');
   const set = <K extends keyof Settings>(key: K, value: Settings[K]) =>
     onChange({ ...settings, [key]: value });
 
@@ -104,11 +102,29 @@ export function SettingsModal({
         <div className="modal-head">
           <h2>Settings</h2>
           <button className="icon-btn" onClick={onClose} aria-label="Close">
-            ✕
+            <IconClose />
           </button>
         </div>
 
-        <Section title="All games">
+        <div className="settings-tabs">
+          <button
+            type="button"
+            className={`tab-btn ${activeTab === 'style' ? 'active' : ''}`}
+            onClick={() => setActiveTab('style')}
+          >
+            Table & Style
+          </button>
+          <button
+            type="button"
+            className={`tab-btn ${activeTab === 'rules' ? 'active' : ''}`}
+            onClick={() => setActiveTab('rules')}
+          >
+            Game Rules
+          </button>
+        </div>
+
+        {activeTab === 'style' ? (
+          <Section title="Table Appearance">
           <div className="setting-group">
             <span className="group-title">Seating</span>
             <div className="opt-row">
@@ -178,138 +194,141 @@ export function SettingsModal({
             </label>
           </div>
         </Section>
-
-        <Section title="Checkers" game>
-          <div className="setting-group">
-            <label className="switch-row">
-              <span>
-                Forced captures
-                <span className="desc">Standard rule: if you can jump, you must</span>
-              </span>
-              <span className="switch">
-                <input
-                  type="checkbox"
-                  checked={settings.forcedCapture}
-                  onChange={(e) => set('forcedCapture', e.target.checked)}
-                />
-                <span className="knob" />
-              </span>
-            </label>
-          </div>
-        </Section>
-
-        <Section title="Yacht Dice" game>
-          <div className="setting-group">
-            <span className="group-title">Players</span>
-            <div className="opt-row">
-              {YD_PLAYERS.map((p) => (
-                <button
-                  key={p.id}
-                  className={`opt ${settings.yachtPlayers === p.id ? 'selected' : ''}`}
-                  onClick={() => set('yachtPlayers', p.id)}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </Section>
-
-        <Section title="Chinese Checkers" game>
-          <div className="setting-group">
-            <span className="group-title">Players</span>
-            <div className="opt-row">
-              {CC_PLAYERS.map((p) => (
-                <button
-                  key={p.id}
-                  className={`opt ${settings.ccPlayers === p.id ? 'selected' : ''}`}
-                  onClick={() => set('ccPlayers', p.id)}
-                >
+        ) : (
+          <div className="rules-tab-content">
+            <Section title="Checkers" game>
+              <div className="setting-group">
+                <label className="switch-row">
                   <span>
-                    {p.label}
-                    <small>{p.hint}</small>
+                    Forced captures
+                    <span className="desc">Standard rule: if you can jump, you must</span>
                   </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </Section>
+                  <span className="switch">
+                    <input
+                      type="checkbox"
+                      checked={settings.forcedCapture}
+                      onChange={(e) => set('forcedCapture', e.target.checked)}
+                    />
+                    <span className="knob" />
+                  </span>
+                </label>
+              </div>
+            </Section>
 
-        <Section title="Quoridor" game>
-          <div className="setting-group">
-            <span className="group-title">Players</span>
-            <div className="opt-row">
-              {QD_PLAYERS.map((p) => (
-                <button
-                  key={p.id}
-                  className={`opt ${settings.quoridorPlayers === p.id ? 'selected' : ''}`}
-                  onClick={() => set('quoridorPlayers', p.id)}
-                >
+            <Section title="Yacht Dice" game>
+              <div className="setting-group">
+                <span className="group-title">Players</span>
+                <div className="opt-row">
+                  {YD_PLAYERS.map((p) => (
+                    <button
+                      key={p.id}
+                      className={`opt ${settings.yachtPlayers === p.id ? 'selected' : ''}`}
+                      onClick={() => set('yachtPlayers', p.id)}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </Section>
+
+            <Section title="Chinese Checkers" game>
+              <div className="setting-group">
+                <span className="group-title">Players</span>
+                <div className="opt-row">
+                  {CC_PLAYERS.map((p) => (
+                    <button
+                      key={p.id}
+                      className={`opt ${settings.ccPlayers === p.id ? 'selected' : ''}`}
+                      onClick={() => set('ccPlayers', p.id)}
+                    >
+                      <span>
+                        {p.label}
+                        <small>{p.hint}</small>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </Section>
+
+            <Section title="Quoridor" game>
+              <div className="setting-group">
+                <span className="group-title">Players</span>
+                <div className="opt-row">
+                  {QD_PLAYERS.map((p) => (
+                    <button
+                      key={p.id}
+                      className={`opt ${settings.quoridorPlayers === p.id ? 'selected' : ''}`}
+                      onClick={() => set('quoridorPlayers', p.id)}
+                    >
+                      <span>
+                        {p.label}
+                        <small>{p.hint}</small>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </Section>
+
+            <Section title="Nine Men’s Morris" game>
+              <div className="setting-group">
+                <label className="switch-row">
                   <span>
-                    {p.label}
-                    <small>{p.hint}</small>
+                    Flying
+                    <span className="desc">
+                      Down to three men, move anywhere on the board
+                    </span>
                   </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </Section>
-
-        <Section title="Nine Men’s Morris" game>
-          <div className="setting-group">
-            <label className="switch-row">
-              <span>
-                Flying
-                <span className="desc">
-                  Down to three men, move anywhere on the board
-                </span>
-              </span>
-              <span className="switch">
-                <input
-                  type="checkbox"
-                  checked={settings.morrisFlying}
-                  onChange={(e) => set('morrisFlying', e.target.checked)}
-                />
-                <span className="knob" />
-              </span>
-            </label>
-          </div>
-        </Section>
-
-        <Section title="Dots & Boxes" game>
-          <div className="setting-group">
-            <span className="group-title">Players</span>
-            <div className="opt-row">
-              {DB_PLAYERS.map((p) => (
-                <button
-                  key={p.id}
-                  className={`opt ${settings.dotsBoxesPlayers === p.id ? 'selected' : ''}`}
-                  onClick={() => set('dotsBoxesPlayers', p.id)}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="setting-group">
-            <span className="group-title">Board size</span>
-            <div className="opt-row">
-              {DB_SIZES.map((s) => (
-                <button
-                  key={s.id}
-                  className={`opt ${settings.dotsBoxesSize === s.id ? 'selected' : ''}`}
-                  onClick={() => set('dotsBoxesSize', s.id)}
-                >
-                  <span>
-                    {s.label}
-                    <small>{s.hint}</small>
+                  <span className="switch">
+                    <input
+                      type="checkbox"
+                      checked={settings.morrisFlying}
+                      onChange={(e) => set('morrisFlying', e.target.checked)}
+                    />
+                    <span className="knob" />
                   </span>
-                </button>
-              ))}
-            </div>
+                </label>
+              </div>
+            </Section>
+
+            <Section title="Dots & Boxes" game>
+              <div className="setting-group">
+                <span className="group-title">Players</span>
+                <div className="opt-row">
+                  {DB_PLAYERS.map((p) => (
+                    <button
+                      key={p.id}
+                      className={`opt ${settings.dotsBoxesPlayers === p.id ? 'selected' : ''}`}
+                      onClick={() => set('dotsBoxesPlayers', p.id)}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="setting-group">
+                <span className="group-title">Board size</span>
+                <div className="opt-row">
+                  {DB_SIZES.map((s) => (
+                    <button
+                      key={s.id}
+                      className={`opt ${settings.dotsBoxesSize === s.id ? 'selected' : ''}`}
+                      onClick={() => set('dotsBoxesSize', s.id)}
+                    >
+                      <span>
+                        {s.label}
+                        <small>{s.hint}</small>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </Section>
           </div>
-        </Section>
+        )}
       </div>
     </div>
   );

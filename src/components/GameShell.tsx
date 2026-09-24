@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import type { ViewMode } from '../settings';
 import { ConfirmModal } from './ConfirmModal';
 import { HelpModal, type GameHelp } from './HelpModal';
+import { IconHelp, IconHome, IconNewGame, IconSettings, IconUndo } from './icons';
 
 /**
  * Where a panel sits around the board. The four ring positions are seats at a
@@ -86,7 +87,7 @@ export function GameShell({
           title="Home"
           aria-label="Home"
         >
-          ⌂
+          <IconHome />
         </button>
         <button
           className="icon-btn"
@@ -94,7 +95,7 @@ export function GameShell({
           title="Settings"
           aria-label="Settings"
         >
-          ⚙
+          <IconSettings />
         </button>
         <button
           className="icon-btn"
@@ -103,7 +104,7 @@ export function GameShell({
           title="Undo"
           aria-label="Undo"
         >
-          ↶
+          <IconUndo />
         </button>
         <button
           className="icon-btn"
@@ -111,7 +112,7 @@ export function GameShell({
           title="New game"
           aria-label="New game"
         >
-          ⟲
+          <IconNewGame />
         </button>
         {help && (
           <button
@@ -120,7 +121,7 @@ export function GameShell({
             title="How to play"
             aria-label="How to play"
           >
-            ?
+            <IconHelp />
           </button>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SettingsModal } from './components/SettingsModal';
+import { IconSettings } from './components/icons';
 import { COMING_SOON, GAMES, type GameId } from './games/registry';
 import { loadSettings, saveSettings, type Settings } from './settings';
 
@@ -49,35 +50,50 @@ function Home({
 }) {
   return (
     <div className="home">
-      <button
-        className="icon-btn corner"
-        onClick={onOpenSettings}
-        title="Settings"
-        aria-label="Settings"
-      >
-        ⚙
-      </button>
-      <h1>Face to Face</h1>
-      <p className="tagline">Table games for 2–4 players on one screen</p>
+      <header className="home-header">
+        <button
+          className="icon-btn corner"
+          onClick={onOpenSettings}
+          title="Settings"
+          aria-label="Settings"
+        >
+          <IconSettings />
+        </button>
+        <div className="brand-badge">
+          <span className="brand-dot" />
+          <span>Tabletop Arcade</span>
+        </div>
+        <h1>Face to Face</h1>
+        <p className="tagline">Classic board & table games for 2–4 players sharing one screen</p>
+      </header>
+
       <div className="game-cards">
         {GAMES.map((g) => (
           <button
             key={g.id}
             className="game-card playable"
             onClick={() => onPlay(g.id)}
+            type="button"
           >
-            <span className="thumb">{g.thumb}</span>
-            <h3>{g.title}</h3>
-            <span className="meta">{g.meta}</span>
-            <span className="play">Play</span>
+            <div className="thumb-surface">
+              <span className={`thumb thumb-${g.id}`}>{g.thumb}</span>
+            </div>
+            <div className="card-info">
+              <h3>{g.title}</h3>
+              <span className="meta">{g.meta}</span>
+            </div>
           </button>
         ))}
         {COMING_SOON.map((g) => (
           <div key={g.id} className="game-card disabled">
-            <span className={`thumb glyph ${g.glyphClass ?? ''}`}>{g.glyph}</span>
-            <h3>{g.title}</h3>
-            <span className="meta">{g.meta}</span>
-            <span className="soon">Coming soon</span>
+            <div className="thumb-surface">
+              <span className={`thumb glyph ${g.glyphClass ?? ''}`}>{g.glyph}</span>
+            </div>
+            <div className="card-info">
+              <h3>{g.title}</h3>
+              <span className="meta">{g.meta}</span>
+              <span className="soon">Coming soon</span>
+            </div>
           </div>
         ))}
       </div>
