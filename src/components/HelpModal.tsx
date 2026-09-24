@@ -1,3 +1,5 @@
+import { IconClose } from './icons';
+
 /**
  * Shared "How to play" modal. Each game describes its rules as a `GameHelp`
  * object (see e.g. games/checkers/help.ts) and passes it to GameShell, which
@@ -16,7 +18,7 @@ export function HelpModal({ help, onClose }: { help: GameHelp; onClose: () => vo
         <div className="modal-head">
           <h2>How to play {help.title}</h2>
           <button className="icon-btn" onClick={onClose} aria-label="Close">
-            ✕
+            <IconClose />
           </button>
         </div>
         <p className="help-objective">{help.objective}</p>

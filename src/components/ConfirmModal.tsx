@@ -23,10 +23,13 @@ export function ConfirmModal({
   return (
     <div className="modal-backdrop" onClick={onCancel}>
       <div className="modal confirm-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="confirm-icon-wrap">
+          <span className="caution-glyph">!</span>
+        </div>
         <div className="confirm-title">{title}</div>
         <p className="confirm-text">{text}</p>
         <div className="win-actions">
-          <button onClick={onConfirm}>{confirmLabel}</button>
+          <button className="danger-btn" onClick={onConfirm}>{confirmLabel}</button>
           <button className="secondary" onClick={onCancel}>
             Cancel
           </button>

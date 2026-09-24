@@ -31,18 +31,24 @@ export function PlayerPanel({
   /** Right-aligned extra content, e.g. checkers' captured-piece tray. */
   children?: ReactNode;
 }) {
-  const swatchVars = {
+  const playerVars = {
     '--pc': `var(--p${player})`,
     '--pe': `var(--p${player}-edge)`,
+    '--ptint': `var(--p${player}-tint, rgba(255,255,255,0.12))`,
   } as CSSProperties;
 
   return (
     <div
       className={`panel panel-${player}${active ? ' active' : ''}${won ? ' won' : ''}`}
+      style={playerVars}
     >
-      <span className="swatch" style={swatchVars} />
+      <span className="swatch" />
       <div className="who">
-        <span className="pname">Player {player}</span>
+        <div className="pname-row">
+          <span className="pname">Player {player}</span>
+          {active && !won && <span className="turn-pill">Turn</span>}
+          {won && <span className="won-pill">Winner</span>}
+        </div>
         <span className="pstatus">{status}</span>
       </div>
       {score !== undefined && <span className="score">{score}</span>}
